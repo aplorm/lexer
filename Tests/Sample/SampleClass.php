@@ -1,8 +1,18 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
 namespace Orm\Lexer\Tests\Sample;
+
+use Orm\Lexer\Exception\ClassNotFoundException;
 
 /**
  * class comment.
@@ -37,21 +47,21 @@ class SampleClass extends DummyClass implements DummyInterface, FooInterface
     private ?bool $nullable = null;
 
     // line comment
-    private string $string = "une string avec des espaces";
+    private string $string = 'une string avec des espaces';
 
-    public $docBloc = <<<EOD
+    public $docBloc = <<<'EOD'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOD;
 
-    public $eot = <<<EOT
+    public $eot = <<<'EOT'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOT;
 
-    public $foobar = <<<FOOBAR
+    public $foobar = <<<'FOOBAR'
 /**
  *  @annotation(namedParameter = 'test')
  */

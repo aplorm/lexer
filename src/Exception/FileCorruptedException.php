@@ -14,12 +14,12 @@ namespace Orm\Lexer\Exception;
 
 use Exception;
 
-class AnnotationSyntaxException extends Exception
+class FileCorruptedException extends Exception
 {
-    private const CODE = 0X4C2;
+    private const CODE = 0X4C4;
 
-    public function __construct(string $message = 'comment syntax not valid')
+    public function __construct(string $file)
     {
-        parent::__construct($message, self::CODE);
+        parent::__construct('unable to open file :'.$file, self::CODE);
     }
 }

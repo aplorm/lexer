@@ -1,4 +1,12 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
@@ -6,7 +14,10 @@ namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\Traits;
 
 trait AnnotationProviderTrait
 {
-    public function annotationProvider()
+    /**
+     * @return array<array<mixed>>
+     */
+    public function annotationProvider(): array
     {
         return [
             [
@@ -30,6 +41,9 @@ trait AnnotationProviderTrait
         ];
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function annotationParamLengthProvider()
     {
         return [
@@ -52,6 +66,9 @@ trait AnnotationProviderTrait
         ];
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function annotationObjectParamProvider()
     {
         return [
@@ -98,6 +115,9 @@ trait AnnotationProviderTrait
         ];
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function annotationStringProvider()
     {
         return [

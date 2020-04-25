@@ -14,12 +14,12 @@ namespace Orm\Lexer\Exception;
 
 use Exception;
 
-class AnnotationSyntaxException extends Exception
+class FileNotFoundException extends Exception
 {
-    private const CODE = 0X4C2;
+    private const CODE = 0X4C1;
 
-    public function __construct(string $message = 'comment syntax not valid')
+    public function __construct(string $file)
     {
-        parent::__construct($message, self::CODE);
+        parent::__construct($file.' not found', self::CODE);
     }
 }
