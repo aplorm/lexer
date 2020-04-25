@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Lexer;
+namespace Aplorm\Lexer\Lexer;
 
-use Orm\Lexer\Analyser\TokenAnalyser;
-use Orm\Lexer\Exception\FileCorruptedException;
-use Orm\Lexer\Exception\FileNotFoundException;
+use Aplorm\Lexer\Analyser\TokenAnalyser;
+use Aplorm\Lexer\Exception\FileCorruptedException;
+use Aplorm\Lexer\Exception\FileNotFoundException;
 use function token_get_all;
 
 class Lexer

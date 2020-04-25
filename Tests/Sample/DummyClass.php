@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Tests\Sample;
 
 class DummyClass
 {

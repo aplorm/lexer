@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Tests\Sample;
 
-use Orm\Lexer\Exception\ClassNotFoundException;
+use Aplorm\Lexer\Exception\ClassNotFoundException;
 
 /**
  * class comment.

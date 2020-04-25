@@ -1,26 +1,35 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer;
+namespace Aplorm\Lexer\Tests\Lexer\Lexer;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Lexer\Lexer;
-use Orm\Lexer\Tests\Sample\SampleClass;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Lexer\Lexer;
+use Aplorm\Lexer\Tests\Sample\SampleClass;
+use ReflectionClass;
 
 class SuccessTest extends AbstractTest
 {
     /**
      * function call in setUp function.
      */
-    protected function doSetup()
+    protected function doSetup(): void
     {
     }
 
     /**
      * function call in tearDown function.
      */
-    protected function doTearDown()
+    protected function doTearDown(): void
     {
     }
 
@@ -32,9 +41,13 @@ class SuccessTest extends AbstractTest
     {
     }
 
-    public function testLexer()
+    public function testLexer(): void
     {
-        $lexer = Lexer::analyse(SampleClass::class);
+        $reflectionClass = new ReflectionClass(SampleClass::class);
+        /** @var string */
+        $fileName = $reflectionClass->getFileName();
+
+        Lexer::analyse($fileName);
         self::assertTrue(true);
     }
 }

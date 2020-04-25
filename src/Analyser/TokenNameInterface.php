@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Analyser;
+namespace Aplorm\Lexer\Analyser;
 
 interface TokenNameInterface
 {

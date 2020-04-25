@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Exception;
+namespace Aplorm\Lexer\Exception;
 
 use Exception;
 

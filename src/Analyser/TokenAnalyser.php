@@ -10,10 +10,10 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Analyser;
+namespace Aplorm\Lexer\Analyser;
 
-use Orm\Lexer\Exception\AnnotationSyntaxException;
-use Orm\Lexer\Exception\PhpSyntaxException;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Lexer\Exception\PhpSyntaxException;
 
 /**
  * Analyse token extract from php file with token_get_all method.

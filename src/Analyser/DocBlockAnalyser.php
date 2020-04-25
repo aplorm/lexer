@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Analyser;
+namespace Aplorm\Lexer\Analyser;
 
-use Orm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
 /**
  * Analyse a docBlock to extract Annotation data.

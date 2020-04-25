@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1587835121">
+  <project timestamp="1587835121">
+    <package name="Aplorm\Lexer\Analyser">
+      <file name="/var/www/html/Lexer/src/Analyser/DocBlockAnalyser.php">
+        <class name="Aplorm\Lexer\Analyser\DocBlockAnalyser" namespace="Aplorm\Lexer\Analyser">
+          <metrics complexity="63" methods="16" coveredmethods="16" conditionals="0" coveredconditionals="0" statements="151" coveredstatements="151" elements="167" coveredelements="167"/>
+        </class>
+        <line num="99" type="method" name="analyse" visibility="public" complexity="3" crap="3" count="26"/>
+        <line num="101" type="stmt" count="26"/>
+        <line num="102" type="stmt" count="26"/>
+        <line num="103" type="stmt" count="26"/>
+        <line num="104" type="stmt" count="26"/>
+        <line num="105" type="stmt" count="26"/>
+        <line num="106" type="stmt" count="26"/>
+        <line num="107" type="stmt" count="16"/>
+        <line num="110" type="stmt" count="16"/>
+        <line num="113" type="stmt" count="16"/>
+        <line num="123" type="method" name="handleAnnotations" visibility="private" complexity="5" crap="5" count="26"/>
+        <line num="126" type="stmt" count="26"/>
+        <line num="129" type="stmt" count="26"/>
+        <line num="131" type="stmt" count="26"/>
+        <line num="132" type="stmt" count="26"/>
+        <line num="133" type="stmt" count="26"/>
+        <line num="134" type="stmt" count="26"/>
+        <line num="135" type="stmt" count="26"/>
+        <line num="136" type="stmt" count="26"/>
+        <line num="138" type="stmt" count="26"/>
+        <line num="139" type="stmt" count="26"/>
+        <line num="142" type="stmt" count="26"/>
+        <line num="143" type="stmt" count="1"/>
+        <line num="146" type="stmt" count="25"/>
+        <line num="148" type="stmt" count="25"/>
+        <line num="149" type="stmt" count="24"/>
+        <line num="152" type="stmt" count="16"/>
+        <line num="164" type="method" name="handleAnnotationParams" visibility="protected" complexity="10" crap="10" count="24"/>
+        <line num="166" type="stmt" count="24"/>
+        <line num="167" type="stmt" count="24"/>
+        <line num="168" type="stmt" count="24"/>
+        <line num="169" type="stmt" count="24"/>
+        <line num="170" type="stmt" count="24"/>
+        <line num="171" type="stmt" count="22"/>
+        <line num="172" type="stmt" count="22"/>
+        <line num="173" type="stmt" count="1"/>
+        <line num="174" type="stmt" count="1"/>
+        <line num="177" type="stmt" count="21"/>
+        <line num="178" type="stmt" count="14"/>
+        <line num="179" type="stmt" count="2"/>
+        <line num="180" type="stmt" count="1"/>
+        <line num="183" type="stmt" count="1"/>
+        <line num="184" type="stmt" count="1"/>
+        <line num="185" type="stmt" count="13"/>
+        <line num="186" type="stmt" count="13"/>
+        <line num="187" type="stmt" count="1"/>
+        <line num="190" type="stmt" count="13"/>
+        <line num="192" type="stmt" count="13"/>
+        <line num="195" type="stmt" count="13"/>
+        <line num="196" type="stmt" count="13"/>
+        <line num="199" type="stmt" count="3"/>
+        <line num="202" type="stmt" count="15"/>
+        <line num="204" type="stmt" count="15"/>
+        <line num="214" type="method" name="handleParam" visibility="protected" complexity="4" crap="4" count="21"/>
+        <line num="216" type="stmt" count="21"/>
+        <line num="217" type="stmt" count="21"/>
+        <line num="218" type="stmt" count="21"/>
+        <line num="220" type="stmt" count="14"/>
+        <line num="221" type="stmt" count="14"/>
+        <line num="223" type="stmt" count="13"/>
+        <line num="225" type="stmt" count="8"/>
+        <line num="226" type="stmt" count="8"/>
+        <line num="228" type="stmt" count="9"/>
+        <line num="230" type="stmt" count="1"/>
+        <line num="231" type="stmt" count="1"/>
+        <line num="234" type="stmt" count="9"/>
+        <line num="236" type="stmt" count="7"/>
+        <line num="237" type="stmt" count="7"/>
+        <line num="240" type="stmt" count="17"/>
+        <line num="242" type="stmt" count="17"/>
+        <line num="254" type="method" name="handleConstant" visibility="protected" complexity="5" crap="5" count="9"/>
+        <line num="256" type="stmt" count="9"/>
+        <line num="257" type="stmt" count="8"/>
+        <line num="258" type="stmt" count="8"/>
+        <line num="259" type="stmt" count="8"/>
+        <line num="260" type="stmt" count="8"/>
+        <line num="261" type="stmt" count="9"/>
+        <line num="263" type="stmt" count="8"/>
+        <line num="264" type="stmt" count="8"/>
+        <line num="267" type="stmt" count="9"/>
+        <line num="268" type="stmt" count="3"/>
+        <line num="271" type="stmt" count="7"/>
+        <line num="283" type="method" name="getConstantType" visibility="protected" complexity="4" crap="4" count="7"/>
+        <line num="285" type="stmt" count="7"/>
+        <line num="286" type="stmt" count="1"/>
+        <line num="289" type="stmt" count="7"/>
+        <line num="290" type="stmt" count="2"/>
+        <line num="293" type="stmt" count="6"/>
+        <line num="294" type="stmt" count="5"/>
+        <line num="297" type="stmt" count="2"/>
+        <line num="309" type="method" name="handleStringParam" visibility="protected" complexity="9" crap="9" count="14"/>
+        <line num="311" type="stmt" count="14"/>
+        <line num="312" type="stmt" count="14"/>
+        <line num="314" type="stmt" count="14"/>
+        <line num="315" type="stmt" count="14"/>
+        <line num="316" type="stmt" count="14"/>
+        <line num="317" type="stmt" count="2"/>
+        <line num="318" type="stmt" count="2"/>
+        <line num="320" type="stmt" count="2"/>
+        <line num="322" type="stmt" count="14"/>
+        <line num="323" type="stmt" count="14"/>
+        <line num="324" type="stmt" count="14"/>
+        <line num="326" type="stmt" count="14"/>
+        <line num="327" type="stmt" count="14"/>
+        <line num="328" type="stmt" count="1"/>
+        <line num="330" type="stmt" count="13"/>
+        <line num="331" type="stmt" count="1"/>
+        <line num="334" type="stmt" count="12"/>
+        <line num="346" type="method" name="handleObject" visibility="protected" complexity="10" crap="10" count="8"/>
+        <line num="348" type="stmt" count="8"/>
+        <line num="349" type="stmt" count="8"/>
+        <line num="350" type="stmt" count="8"/>
+        <line num="351" type="stmt" count="8"/>
+        <line num="352" type="stmt" count="8"/>
+        <line num="353" type="stmt" count="8"/>
+        <line num="355" type="stmt" count="8"/>
+        <line num="356" type="stmt" count="5"/>
+        <line num="357" type="stmt" count="8"/>
+        <line num="358" type="stmt" count="8"/>
+        <line num="359" type="stmt" count="8"/>
+        <line num="360" type="stmt" count="8"/>
+        <line num="362" type="stmt" count="8"/>
+        <line num="363" type="stmt" count="1"/>
+        <line num="365" type="stmt" count="8"/>
+        <line num="366" type="stmt" count="4"/>
+        <line num="368" type="stmt" count="5"/>
+        <line num="369" type="stmt" count="8"/>
+        <line num="373" type="stmt" count="1"/>
+        <line num="376" type="stmt" count="8"/>
+        <line num="377" type="stmt" count="8"/>
+        <line num="378" type="stmt" count="8"/>
+        <line num="380" type="stmt" count="5"/>
+        <line num="382" type="stmt" count="8"/>
+        <line num="385" type="stmt" count="5"/>
+        <line num="387" type="stmt" count="5"/>
+        <line num="395" type="method" name="tokenise" visibility="protected" complexity="1" crap="1" count="26"/>
+        <line num="397" type="stmt" count="26"/>
+        <line num="398" type="stmt" count="26"/>
+        <line num="405" type="method" name="init" visibility="protected" complexity="1" crap="1" count="26"/>
+        <line num="407" type="stmt" count="26"/>
+        <line num="409" type="stmt" count="26"/>
+        <line num="410" type="stmt" count="26"/>
+        <line num="411" type="stmt" count="26"/>
+        <line num="412" type="stmt" count="26"/>
+        <line num="417" type="method" name="next" visibility="protected" complexity="2" crap="2" count="26"/>
+        <line num="419" type="stmt" count="26"/>
+        <line num="420" type="stmt" count="26"/>
+        <line num="422" type="stmt" count="26"/>
+        <line num="423" type="stmt" count="26"/>
+        <line num="425" type="stmt" count="26"/>
+        <line num="430" type="method" name="buffering" visibility="protected" complexity="1" crap="1" count="26"/>
+        <line num="432" type="stmt" count="26"/>
+        <line num="433" type="stmt" count="26"/>
+        <line num="440" type="method" name="flush" visibility="protected" complexity="2" crap="2" count="26"/>
+        <line num="442" type="stmt" count="26"/>
+        <line num="443" type="stmt" count="26"/>
+        <line num="445" type="stmt" count="26"/>
+        <line num="453" type="method" name="skip" visibility="protected" complexity="2" crap="2" count="26"/>
+        <line num="455" type="stmt" count="26"/>
+        <line num="456" type="stmt" count="26"/>
+        <line num="459" type="stmt" count="26"/>
+        <line num="467" type="method" name="isA" visibility="protected" complexity="2" crap="2" count="26"/>
+        <line num="469" type="stmt" count="26"/>
+        <line num="470" type="stmt" count="26"/>
+        <line num="473" type="stmt" count="26"/>
+        <line num="481" type="method" name="tokenValue" visibility="protected" complexity="2" crap="2" count="26"/>
+        <line num="483" type="stmt" count="26"/>
+        <metrics loc="485" ncloc="340" classes="1" methods="16" coveredmethods="16" conditionals="0" coveredconditionals="0" statements="151" coveredstatements="151" elements="167" coveredelements="167"/>
+      </file>
+      <file name="/var/www/html/Lexer/src/Analyser/TokenAnalyser.php">
+        <class name="Aplorm\Lexer\Analyser\TokenAnalyser" namespace="Aplorm\Lexer\Analyser">
+          <metrics complexity="56" methods="21" coveredmethods="19" conditionals="0" coveredconditionals="0" statements="149" coveredstatements="141" elements="170" coveredelements="160"/>
+        </class>
+        <line num="123" type="method" name="analyse" visibility="public" complexity="7" crap="7" count="1"/>
+        <line num="125" type="stmt" count="1"/>
+        <line num="127" type="stmt" count="1"/>
+        <line num="128" type="stmt" count="1"/>
+        <line num="129" type="stmt" count="1"/>
+        <line num="130" type="stmt" count="1"/>
+        <line num="131" type="stmt" count="1"/>
+        <line num="132" type="stmt" count="1"/>
+        <line num="133" type="stmt" count="1"/>
+        <line num="134" type="stmt" count="1"/>
+        <line num="135" type="stmt" count="1"/>
+        <line num="136" type="stmt" count="1"/>
+        <line num="137" type="stmt" count="1"/>
+        <line num="138" type="stmt" count="1"/>
+        <line num="142" type="stmt" count="1"/>
+        <line num="144" type="stmt" count="1"/>
+        <line num="146" type="stmt" count="1"/>
+        <line num="152" type="method" name="handleClassName" visibility="protected" complexity="3" crap="3" count="1"/>
+        <line num="154" type="stmt" count="1"/>
+        <line num="155" type="stmt" count="1"/>
+        <line num="158" type="stmt" count="1"/>
+        <line num="159" type="stmt" count="1"/>
+        <line num="161" type="stmt" count="1"/>
+        <line num="162" type="stmt" count="1"/>
+        <line num="165" type="stmt" count="1"/>
+        <line num="166" type="stmt" count="1"/>
+        <line num="167" type="stmt" count="1"/>
+        <line num="168" type="stmt" count="1"/>
+        <line num="171" type="stmt" count="1"/>
+        <line num="173" type="stmt" count="1"/>
+        <line num="174" type="stmt" count="1"/>
+        <line num="181" type="method" name="handleDocComment" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="183" type="stmt" count="1"/>
+        <line num="184" type="stmt" count="1"/>
+        <line num="185" type="stmt" count="1"/>
+        <line num="192" type="method" name="handleNamespace" visibility="protected" complexity="8" crap="9.14" count="1"/>
+        <line num="194" type="stmt" count="1"/>
+        <line num="195" type="stmt" count="1"/>
+        <line num="196" type="stmt" count="1"/>
+        <line num="198" type="stmt" count="1"/>
+        <line num="199" type="stmt" count="1"/>
+        <line num="201" type="stmt" count="1"/>
+        <line num="203" type="stmt" count="1"/>
+        <line num="204" type="stmt" count="0"/>
+        <line num="205" type="stmt" count="1"/>
+        <line num="206" type="stmt" count="0"/>
+        <line num="207" type="stmt" count="0"/>
+        <line num="209" type="stmt" count="0"/>
+        <line num="211" type="stmt" count="1"/>
+        <line num="212" type="stmt" count="1"/>
+        <line num="213" type="stmt" count="1"/>
+        <line num="215" type="stmt" count="0"/>
+        <line num="216" type="stmt" count="0"/>
+        <line num="218" type="stmt" count="1"/>
+        <line num="221" type="stmt" count="1"/>
+        <line num="224" type="stmt" count="1"/>
+        <line num="225" type="stmt" count="1"/>
+        <line num="226" type="stmt" count="1"/>
+        <line num="228" type="stmt" count="1"/>
+        <line num="235" type="method" name="handleElement" visibility="protected" complexity="8" crap="8" count="1"/>
+        <line num="237" type="stmt" count="1"/>
+        <line num="238" type="stmt" count="1"/>
+        <line num="239" type="stmt" count="1"/>
+        <line num="240" type="stmt" count="1"/>
+        <line num="241" type="stmt" count="1"/>
+        <line num="242" type="stmt" count="1"/>
+        <line num="243" type="stmt" count="1"/>
+        <line num="245" type="stmt" count="1"/>
+        <line num="246" type="stmt" count="1"/>
+        <line num="247" type="stmt" count="1"/>
+        <line num="250" type="stmt" count="1"/>
+        <line num="251" type="stmt" count="1"/>
+        <line num="252" type="stmt" count="1"/>
+        <line num="253" type="stmt" count="1"/>
+        <line num="254" type="stmt" count="1"/>
+        <line num="255" type="stmt" count="1"/>
+        <line num="257" type="stmt" count="1"/>
+        <line num="259" type="stmt" count="1"/>
+        <line num="260" type="stmt" count="1"/>
+        <line num="262" type="stmt" count="1"/>
+        <line num="264" type="stmt" count="1"/>
+        <line num="265" type="stmt" count="1"/>
+        <line num="267" type="stmt" count="1"/>
+        <line num="272" type="method" name="handleVariable" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="274" type="stmt" count="1"/>
+        <line num="275" type="stmt" count="1"/>
+        <line num="278" type="stmt" count="1"/>
+        <line num="279" type="stmt" count="1"/>
+        <line num="280" type="stmt" count="1"/>
+        <line num="281" type="stmt" count="1"/>
+        <line num="282" type="stmt" count="1"/>
+        <line num="285" type="stmt" count="1"/>
+        <line num="286" type="stmt" count="1"/>
+        <line num="287" type="stmt" count="1"/>
+        <line num="288" type="stmt" count="1"/>
+        <line num="289" type="stmt" count="1"/>
+        <line num="290" type="stmt" count="1"/>
+        <line num="291" type="stmt" count="1"/>
+        <line num="296" type="method" name="handleVariableDefaultValue" visibility="protected" complexity="3" crap="3" count="1"/>
+        <line num="298" type="stmt" count="1"/>
+        <line num="299" type="stmt" count="1"/>
+        <line num="301" type="stmt" count="1"/>
+        <line num="302" type="stmt" count="1"/>
+        <line num="303" type="stmt" count="1"/>
+        <line num="305" type="stmt" count="1"/>
+        <line num="313" type="method" name="addNamespaceToPart" visibility="protected" complexity="5" crap="5.27" count="1"/>
+        <line num="315" type="stmt" count="1"/>
+        <line num="316" type="stmt" count="1"/>
+        <line num="317" type="stmt" count="1"/>
+        <line num="318" type="stmt" count="0"/>
+        <line num="320" type="stmt" count="1"/>
+        <line num="323" type="stmt" count="0"/>
+        <line num="326" type="stmt" count="1"/>
+        <line num="327" type="stmt" count="1"/>
+        <line num="328" type="stmt" count="1"/>
+        <line num="333" type="method" name="buffering" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="335" type="stmt" count="1"/>
+        <line num="336" type="stmt" count="1"/>
+        <line num="343" type="method" name="flush" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="345" type="stmt" count="1"/>
+        <line num="346" type="stmt" count="1"/>
+        <line num="348" type="stmt" count="1"/>
+        <line num="358" type="method" name="addDataToPart" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="360" type="stmt" count="1"/>
+        <line num="361" type="stmt" count="1"/>
+        <line num="368" type="method" name="skip" visibility="protected" complexity="2" crap="2" count="1"/>
+        <line num="370" type="stmt" count="1"/>
+        <line num="371" type="stmt" count="1"/>
+        <line num="373" type="stmt" count="1"/>
+        <line num="374" type="stmt" count="1"/>
+        <line num="377" type="stmt" count="1"/>
+        <line num="378" type="stmt" count="1"/>
+        <line num="381" type="stmt" count="1"/>
+        <line num="387" type="method" name="next" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="389" type="stmt" count="1"/>
+        <line num="390" type="stmt" count="1"/>
+        <line num="391" type="stmt" count="1"/>
+        <line num="398" type="method" name="init" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="400" type="stmt" count="1"/>
+        <line num="401" type="stmt" count="1"/>
+        <line num="402" type="stmt" count="1"/>
+        <line num="403" type="stmt" count="1"/>
+        <line num="404" type="stmt" count="1"/>
+        <line num="409" type="method" name="readToken" visibility="protected" complexity="3" crap="3" count="1"/>
+        <line num="411" type="stmt" count="1"/>
+        <line num="412" type="stmt" count="1"/>
+        <line num="413" type="stmt" count="1"/>
+        <line num="414" type="stmt" count="1"/>
+        <line num="415" type="stmt" count="1"/>
+        <line num="418" type="stmt" count="1"/>
+        <line num="420" type="stmt" count="1"/>
+        <line num="421" type="stmt" count="1"/>
+        <line num="423" type="stmt" count="1"/>
+        <line num="428" type="method" name="tokenValue" visibility="protected" complexity="2" crap="2" count="1"/>
+        <line num="430" type="stmt" count="1"/>
+        <line num="436" type="method" name="previousTokenValue" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="438" type="stmt" count="1"/>
+        <line num="448" type="method" name="getSpecificPart" visibility="protected" complexity="1" crap="1" count="1"/>
+        <line num="450" type="stmt" count="1"/>
+        <line num="460" type="method" name="getCustomToken" visibility="protected" complexity="2" crap="2" count="1"/>
+        <line num="462" type="stmt" count="1"/>
+        <line num="470" type="method" name="isA" visibility="protected" complexity="2" crap="2" count="1"/>
+        <line num="472" type="stmt" count="1"/>
+        <line num="473" type="stmt" count="1"/>
+        <line num="476" type="stmt" count="1"/>
+        <line num="479" type="method" name="debug" visibility="protected" complexity="2" crap="2" count="1"/>
+        <line num="481" type="stmt" count="1"/>
+        <line num="482" type="stmt" count="1"/>
+        <line num="484" type="stmt" count="1"/>
+        <line num="486" type="stmt" count="1"/>
+        <metrics loc="487" ncloc="319" classes="1" methods="21" coveredmethods="19" conditionals="0" coveredconditionals="0" statements="149" coveredstatements="141" elements="170" coveredelements="160"/>
+      </file>
+    </package>
+    <file name="/var/www/html/Lexer/src/Analyser/DocBlockTokenInterface.php">
+      <metrics loc="35" ncloc="24" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/var/www/html/Lexer/src/Analyser/TokenNameInterface.php">
+      <metrics loc="59" ncloc="51" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <package name="Aplorm\Lexer\Exception">
+      <file name="/var/www/html/Lexer/src/Exception/AnnotationSyntaxException.php">
+        <class name="Aplorm\Lexer\Exception\AnnotationSyntaxException" namespace="Aplorm\Lexer\Exception">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+        </class>
+        <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="10"/>
+        <line num="23" type="stmt" count="10"/>
+        <line num="24" type="stmt" count="10"/>
+        <metrics loc="25" ncloc="17" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+      </file>
+      <file name="/var/www/html/Lexer/src/Exception/FileCorruptedException.php">
+        <class name="Aplorm\Lexer\Exception\FileCorruptedException" namespace="Aplorm\Lexer\Exception">
+          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+        </class>
+        <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="22" type="stmt" count="0"/>
+        <line num="23" type="stmt" count="0"/>
+        <line num="24" type="stmt" count="0"/>
+        <metrics loc="25" ncloc="17" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+      </file>
+      <file name="/var/www/html/Lexer/src/Exception/FileNotFoundException.php">
+        <class name="Aplorm\Lexer\Exception\FileNotFoundException" namespace="Aplorm\Lexer\Exception">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+        </class>
+        <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <metrics loc="25" ncloc="17" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+      </file>
+      <file name="/var/www/html/Lexer/src/Exception/PhpSyntaxException.php">
+        <class name="Aplorm\Lexer\Exception\PhpSyntaxException" namespace="Aplorm\Lexer\Exception">
+          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+        </class>
+        <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="22" type="stmt" count="0"/>
+        <line num="23" type="stmt" count="0"/>
+        <line num="24" type="stmt" count="0"/>
+        <metrics loc="25" ncloc="17" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+      </file>
+    </package>
+    <package name="Aplorm\Lexer\Lexer">
+      <file name="/var/www/html/Lexer/src/Lexer/Lexer.php">
+        <class name="Aplorm\Lexer\Lexer\Lexer" namespace="Aplorm\Lexer\Lexer">
+          <metrics complexity="6" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="17" coveredelements="15"/>
+        </class>
+        <line num="31" type="method" name="analyse" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="33" type="stmt" count="2"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="46" type="method" name="fileExist" visibility="private" complexity="2" crap="2" count="2"/>
+        <line num="48" type="stmt" count="2"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="64" type="method" name="getFileContent" visibility="private" complexity="3" crap="3.04" count="1"/>
+        <line num="66" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="69" type="stmt" count="1"/>
+        <line num="70" type="stmt" count="0"/>
+        <line num="73" type="stmt" count="1"/>
+        <line num="76" type="stmt" count="1"/>
+        <metrics loc="78" ncloc="49" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="17" coveredelements="15"/>
+      </file>
+    </package>
+    <metrics files="9" loc="1244" ncloc="851" classes="7" methods="44" coveredmethods="39" conditionals="0" coveredconditionals="0" statements="324" coveredstatements="309" elements="368" coveredelements="348"/>
+  </project>
+</coverage>
