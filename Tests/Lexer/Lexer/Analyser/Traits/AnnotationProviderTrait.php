@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\Traits;
+namespace Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\Traits;
 
 trait AnnotationProviderTrait
 {

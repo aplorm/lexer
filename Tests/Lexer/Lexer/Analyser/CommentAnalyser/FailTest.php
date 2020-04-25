@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Analyser\DocBlockAnalyser;
-use Orm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
 class FailTest extends AbstractTest
 {

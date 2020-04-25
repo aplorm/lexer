@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Analyser\DocBlockAnalyser;
-use Orm\Lexer\Tests\Lexer\Lexer\Analyser\Traits\AnnotationProviderTrait;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
+use Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\Traits\AnnotationProviderTrait;
 
 class SuccessTest extends AbstractTest
 {
