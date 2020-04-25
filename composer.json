@@ -3,7 +3,7 @@
     "description": "Lexer for aplorm",
     "type": "library",
     "require": {
-        "orm/common": "dev-master"
+        "aplorm/common": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

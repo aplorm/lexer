@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99a5d9dbdc6d07136ceb9b8ec023cb72",
+    "content-hash": "48a995944315d9d0360b222d4b6a296d",
     "packages": [
+        {
+            "name": "aplorm/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aplorm/common.git",
+                "reference": "f8ff978908a892d9395f6f21f0f79ec9792ee5f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aplorm/common/zipball/f8ff978908a892d9395f6f21f0f79ec9792ee5f3",
+                "reference": "f8ff978908a892d9395f6f21f0f79ec9792ee5f3",
+                "shasum": ""
+            },
+            "require": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpstan/phpstan-symfony": "^0.12.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aplorm\\Common\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Aplorm\\Common\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "nicolas moral",
+                    "email": "n.moral@live.fr"
+                }
+            ],
+            "description": "Common librarie for orm",
+            "support": {
+                "source": "https://github.com/aplorm/common/tree/master",
+                "issues": "https://github.com/aplorm/common/issues"
+            },
+            "time": "2020-04-25T15:51:02+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.3.0",
@@ -109,43 +157,6 @@
                 "object graph"
             ],
             "time": "2020-01-17T21:11:47+00:00"
-        },
-        {
-            "name": "orm/common",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "../Common",
-                "reference": "815c0215c12b11a5182bb8a0bde1bcfe8f296689"
-            },
-            "require": {
-                "phpunit/phpunit": "^9.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "phpstan/phpstan-symfony": "^0.12.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Orm\\Common\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Orm\\Common\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "nicolas moral",
-                    "email": "n.moral@live.fr"
-                }
-            ],
-            "description": "Common librarie for orm"
         },
         {
             "name": "phar-io/manifest",
@@ -3314,7 +3325,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "orm/common": 20
+        "aplorm/common": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
