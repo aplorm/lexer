@@ -1,6 +1,6 @@
 {
-    "name": "orm/lexer",
-    "description": "Lexer for orm",
+    "name": "aplorm/lexer",
+    "description": "Lexer for aplorm",
     "type": "library",
     "require": {
         "orm/common": "dev-master"
@@ -19,18 +19,18 @@
     ],
     "autoload": {
         "psr-4": {
-            "Orm\\Lexer\\": "src/"
+            "Aplorm\\Lexer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Orm\\Lexer\\Tests\\": "tests/"
+            "Aplorm\\Lexer\\Tests\\": "tests/"
         }
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "../Common"
+            "type": "vcs",
+            "url": "https://github.com/aplorm/common"
         }
     ]
 }
