@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Aplorm\\Lexer\\Tests\\": "tests/"
+            "Aplorm\\Lexer\\Tests\\": "Tests/"
         }
     },
     "repositories": [
