@@ -230,6 +230,14 @@ class ClassPartAnalyser
             $funcData['returnType'] = self::handleReturnData();
         }
 
+        if (self::isA(TokenNameInterface::OPEN_CURLY_BRACE_TOKEN)) {
+            self::handleFunctionContent();
+        } elseif (self::isA(TokenNameInterface::SEMI_COLON_TOKEN)) {
+            self::next();
+            self::skip();
+        }
+        self::next();
+
         return ['partType' => TokenAnalyser::FUNCTION_PART, 'partName' => $functionName, 'partData' => $funcData];
     }
 
@@ -374,6 +382,29 @@ class ClassPartAnalyser
     protected static function handleReturnData(): array
     {
         return self::handleElementData();
+    }
+
+    protected static function handleFunctionContent(): void
+    {
+        $nbOpenCurlyBrace = 1;
+
+        while ($nbOpenCurlyBrace > 0 && self::$iterator < self::$tokenLength) {
+
+            self::next();
+            self::skip();
+            if (self::isA(TokenNameInterface::OPEN_CURLY_BRACE_TOKEN)) {
+                ++$nbOpenCurlyBrace;
+                continue;
+            }
+
+            if (self::isA(TokenNameInterface::CLOSE_CURLY_BRACE_TOKEN)) {
+                --$nbOpenCurlyBrace;
+                if (0 === $nbOpenCurlyBrace) {
+                    break;
+                }
+                continue;
+            }
+        }
     }
 
     protected static function reset(): void

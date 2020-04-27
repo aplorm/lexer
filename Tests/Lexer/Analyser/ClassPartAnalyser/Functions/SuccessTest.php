@@ -88,6 +88,80 @@ class SuccessTest extends AbstractTest
         self::assertTrue($partData['returnType']['nullable']);
     }
 
+    public function testFunctionContent(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo() {
+            if (true) {}
+            else {
+                while(true) {
+                    if(false) {}
+                }
+            }
+        }
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals('foo', $partName);
+    }
+
+    public function testAbstractFunction(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        abstract public function foo();
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals('foo', $partName);
+        self::assertEquals('public', $partData['visibility']);
+    }
+
+    public function testAbstractReturnFunction(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        abstract public function foo(): ?string;
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals('foo', $partName);
+        self::assertEquals('public', $partData['visibility']);
+        self::assertEquals('string', $partData['returnType']['type']);
+        self::assertTrue($partData['returnType']['nullable']);
+    }
+
     public function testParameterName(): void
     {
         $code = <<< 'EOT'
