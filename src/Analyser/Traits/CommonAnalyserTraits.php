@@ -54,7 +54,7 @@ trait CommonAnalyserTraits
     protected static function skip(): bool
     {
         $skip = false;
-        while (self::isA(
+        while (self::$iterator < self::$tokenLength && self::isA(
             [
                 TokenNameInterface::WHITESPACE_TOKEN,
                 TokenNameInterface::EMPTY_TOKEN,
