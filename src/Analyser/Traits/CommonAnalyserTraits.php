@@ -81,6 +81,10 @@ trait CommonAnalyserTraits
      */
     protected static function readToken(): void
     {
+        if (!isset(self::$tokens[self::$iterator])) {
+            return;
+        }
+
         if (\is_string(self::$tokens[self::$iterator])) {
             $value = self::$tokens[self::$iterator];
             self::$tokens[self::$iterator] = [
