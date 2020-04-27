@@ -17,8 +17,6 @@ use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
 /**
  * Analyse token extract from php file with token_get_all method.
- *
- * TODO: Extract Element analyzed in subclass
  */
 class TokenAnalyser
 {

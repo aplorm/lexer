@@ -3,6 +3,7 @@
     "description": "Lexer for aplorm",
     "type": "library",
     "require": {
+        "php": "7.4.3",
         "aplorm/common": "dev-master"
     },
     "require-dev": {
