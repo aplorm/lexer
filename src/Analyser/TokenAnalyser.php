@@ -298,7 +298,6 @@ class TokenAnalyser
             self::VARIABLE_PART => [],
             self::FUNCTION_PART => [],
         ];
-        self::$token = null;
         self::$previousToken = null;
         self::$previousVisibility = null;
         self::$nullable = false;
@@ -307,8 +306,8 @@ class TokenAnalyser
         self::$token = self::$previousToken = null;
         self::$tokenLength = \count($tokens);
         self::$iterator = 0;
-        self::readToken();
         self::$tokens = &$tokens;
+        self::readToken();
         ClassPartAnalyser::init(self::$tokens, self::$iterator, self::$tokenLength);
     }
 

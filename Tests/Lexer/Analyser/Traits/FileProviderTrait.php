@@ -29,7 +29,7 @@ trait FileProviderTrait
         $content = file_get_contents($fileName);
 
         if (false === $fileName) {
-            throw new \RuntimeException('Unabele to open file');
+            throw new \RuntimeException('Unable to open file');
         }
 
         return $content;
