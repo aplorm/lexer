@@ -490,7 +490,7 @@ class DocBlockAnalyser
      */
     protected static function skip(): bool
     {
-        while (self::isA(self::SKIPPED_TOKEN)) {
+        while (self::$iterator < self::$tokenLength && self::isA(self::SKIPPED_TOKEN)) {
             self::next();
         }
 
