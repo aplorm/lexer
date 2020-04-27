@@ -25,8 +25,6 @@ class Lexer
      * analyse class.
      *
      * @param string $filePath the file to analyse
-     *
-     * @todo : change to pass the filename instead of classname
      */
     public static function analyse(string $filePath): void
     {
@@ -35,7 +33,7 @@ class Lexer
 
         $tokens = token_get_all(self::$classContent);
 
-        TokenAnalyser::analyse($tokens);
+        $part = TokenAnalyser::analyse($tokens);
     }
 
     /**

@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Analyser\CommentAnalyser;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\DocBlockAnalyser;
-use Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\Traits\AnnotationProviderTrait;
+use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\AnnotationProviderTrait;
 
 class SuccessTest extends AbstractTest
 {
@@ -82,6 +82,17 @@ EOD;
         $annotations = DocBlockAnalyser::analyse($docBloc);
         self::assertEquals(1, \count($annotations));
         self::assertEquals('namedParameter', $annotations[0]['params'][0]['name']);
+    }
+
+    public function testExcluedAnnotation(): void
+    {
+        $docBloc = <<<'EOD'
+/**
+ *  @param
+ */
+EOD;
+        $annotations = DocBlockAnalyser::analyse($docBloc);
+        self::assertEquals(0, \count($annotations));
     }
 
     /**

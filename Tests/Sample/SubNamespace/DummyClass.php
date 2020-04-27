@@ -10,16 +10,8 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Exception;
+namespace Aplorm\Lexer\Tests\Sample\SubNamespace;
 
-use Exception;
-
-class PhpSyntaxException extends Exception
+class DummyClass
 {
-    private const CODE = 0X4C3;
-
-    public function __construct(string $message = 'php syntax not valid')
-    {
-        parent::__construct($message, self::CODE);
-    }
 }

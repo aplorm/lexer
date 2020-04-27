@@ -9,6 +9,10 @@ $header = <<<'EOD'
  file that was distributed with this source code.
 EOD;
 
+$finder = PhpCsFixer\Finder::create()
+    ->exclude(['Tests/Sample'])
+    ->in(__DIR__)
+;
 return PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
@@ -95,9 +99,10 @@ return PhpCsFixer\Config::create()
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
+            ->exclude(['Sample'])
             ->in([
                 __DIR__.'/src',
-                __DIR__.'/tests',
+                __DIR__.'/Tests',
             ])
     )
 ;

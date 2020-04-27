@@ -35,15 +35,11 @@ class DocBlockAnalyser
 
     /**
      * position in self::$tokens.
-     *
-     * @var int
      */
     protected static int $iterator = 0;
 
     /**
      * number of tokens.
-     *
-     * @var int
      */
     protected static int $tokenLength = 0;
 
@@ -89,6 +85,43 @@ class DocBlockAnalyser
         DocBlockTokenInterface::EMPTY_TOKEN,
     ];
 
+    protected const EXCLUED_ANNOTATIONS = [
+        'example',
+        'internal',
+        'inheritdoc',
+        'link',
+        'see',
+        'api',
+        'author',
+        'category',
+        'copyright',
+        'deprecated',
+        'example',
+        'filesource',
+        'global',
+        'ignore',
+        'internal',
+        'license',
+        'link',
+        'method',
+        'package',
+        'param',
+        'property',
+        'property-read',
+        'property-write',
+        'return',
+        'see',
+        'since',
+        'source',
+        'subpackage',
+        'throws',
+        'todo',
+        'uses',
+        'used-by',
+        'var',
+        'version',
+    ];
+
     /**
      * @param string $blocComment The docBloc who may contains annotation
      *
@@ -104,7 +137,9 @@ class DocBlockAnalyser
             self::skip();
             if (self::isA(DocBlockTokenInterface::AROBASE_TOKEN)) {
                 $annotation = self::handleAnnotations();
-                $annotations[] = $annotation;
+                if (null !== $annotation) {
+                    $annotations[] = $annotation;
+                }
             }
 
             self::next();
@@ -120,7 +155,7 @@ class DocBlockAnalyser
      *
      * @return array<string, string|array> the current annotations
      */
-    private static function handleAnnotations(): array
+    private static function handleAnnotations(): ?array
     {
         $annotation = [
             'name' => null,
@@ -142,8 +177,11 @@ class DocBlockAnalyser
         if (self::$iterator >= self::$tokenLength) {
             throw new AnnotationSyntaxException('Unable to parse docblock got : '.self::flush());
         }
-
-        $annotation['name'] = self::flush();
+        $name = self::flush();
+        if (\in_array($name, self::EXCLUED_ANNOTATIONS, true)) {
+            return null;
+        }
+        $annotation['name'] = $name;
 
         if (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
             $annotation['params'] = self::handleAnnotationParams($annotation['name']);
@@ -209,7 +247,7 @@ class DocBlockAnalyser
      *
      * @param string $annotation the current annotation
      *
-     * @return array<string, mixed>         the param analyzed
+     * @return array<string, mixed>|null         the param analyzed
      */
     protected static function handleParam(string $annotation)
     {
@@ -358,7 +396,7 @@ class DocBlockAnalyser
                 DocBlockTokenInterface::COMMA_TOKEN,
                 DocBlockTokenInterface::EMPTY_TOKEN,
                 DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
-            ])) {
+            ]) && null !== $param) {
                 if (null === $currentKey && empty($param[self::PARAM_VALUE_KEY])) {
                     throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation);
                 }

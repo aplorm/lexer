@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Analyser\CommentAnalyser;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\DocBlockAnalyser;

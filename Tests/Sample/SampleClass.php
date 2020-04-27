@@ -70,7 +70,57 @@ FOOBAR;
     // bloc simple comment
     private ?ClassNotFoundException $class;
 
-    public function mafunction($param1, $param2): bool
+    private array $array = [
+        ['A' => 'B'],
+        ['A', 'B'],
+        'A',
+    ];
+
+    private array $array2 = [
+        ['A' => 'B'],
+        ['A', 'B'],
+        'A',
+    ];
+
+    /**
+     * [mafunction description].
+     *
+     * @param string $param1 [description]
+     * @param array  $param2 [description]
+     *
+     * @return [type] [description]
+     *
+     * @annotationValid
+     */
+    public function mafunction(string $param1, array $param2): bool
+    {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction4(
+        string $param1,
+        array $param2
+    ): bool {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction2(string $param1 = 'bla', array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
+    {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction3(string $param1 = <<<'EOT'
+        bla bla
+    EOT , array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
         if (true) {
         }

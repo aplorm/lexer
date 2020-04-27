@@ -2,3 +2,5 @@ vendor/
 public/
 .idea/
 .env
+
+.php_cs.cache
