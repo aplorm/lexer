@@ -88,7 +88,7 @@ EOD;
     {
         $docBloc = <<<'EOD'
 /**
- *  @param
+ *  @author
  */
 EOD;
         $annotations = DocBlockAnalyser::analyse($docBloc);

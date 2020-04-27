@@ -14,7 +14,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Functions;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
-use Aplorm\Lexer\Analyser\TokenAnalyser;
+use Aplorm\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest
@@ -60,7 +60,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
     }
@@ -82,7 +82,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('string', $partData['returnType']['type']);
         self::assertTrue($partData['returnType']['nullable']);
@@ -112,7 +112,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
         self::assertEquals('foo', $partName);
     }
 
@@ -133,7 +133,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
     }
@@ -155,7 +155,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
         self::assertEquals('string', $partData['returnType']['type']);

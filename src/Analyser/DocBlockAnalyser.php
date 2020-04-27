@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Lexer\TypeInterface;
 
 /**
  * Analyse a docBlock to extract Annotation data.
@@ -56,15 +57,6 @@ class DocBlockAnalyser
 
     protected const PARAM_TYPE_KEY = 'type';
 
-    // TODO : Put type constant into an interface
-    protected const STRING_TYPE = 1;
-    protected const CLASS_CONSTANT_TYPE = 2;
-    protected const OTHER_CONSTANT_TYPE = 3;
-    protected const NUMBER_CONSTANT_TYPE = 4;
-    protected const ARRAY_TYPE = 5;
-    protected const OBJECT_TYPE = 6;
-    protected const ANNOTATION_TYPE = 7;
-
     /**
      * token that open string in annotation.
      */
@@ -105,11 +97,9 @@ class DocBlockAnalyser
         'link',
         'method',
         'package',
-        'param',
         'property',
         'property-read',
         'property-write',
-        'return',
         'see',
         'since',
         'source',
@@ -118,8 +108,13 @@ class DocBlockAnalyser
         'todo',
         'uses',
         'used-by',
-        'var',
         'version',
+    ];
+
+    protected const TYPE_ANNOTATIONS = [
+        'var',
+        'param',
+        'return',
     ];
 
     /**
@@ -178,12 +173,14 @@ class DocBlockAnalyser
             throw new AnnotationSyntaxException('Unable to parse docblock got : '.self::flush());
         }
         $name = self::flush();
+
         if (\in_array($name, self::EXCLUED_ANNOTATIONS, true)) {
             return null;
         }
         $annotation['name'] = $name;
-
-        if (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
+        if (\in_array($name, self::TYPE_ANNOTATIONS, true)) {
+            $annotation['types'] = self::handleTypeAnnotations();
+        } elseif (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
             $annotation['params'] = self::handleAnnotationParams($annotation['name']);
         }
 
@@ -214,7 +211,7 @@ class DocBlockAnalyser
             }
             $lastParam = self::handleParam($annotation);
             if (self::isA(DocBlockTokenInterface::EQUAL_TOKEN)) {
-                if (self::OTHER_CONSTANT_TYPE !== $lastParam[self::PARAM_TYPE_KEY]) {
+                if (TypeInterface::OTHER_CONSTANT_TYPE !== $lastParam[self::PARAM_TYPE_KEY]) {
                     throw new AnnotationSyntaxException('param name must be a constant');
                 }
 
@@ -242,6 +239,36 @@ class DocBlockAnalyser
         return $params;
     }
 
+    protected static function handleTypeAnnotations(): array
+    {
+        $types = [
+            'paramTypes' => [],
+        ];
+        self::skip();
+
+        while (self::$iterator < self::$tokenLength && !self::isA(self::SKIPPED_TOKEN)) {
+            if (self::isA(DocBlockTokenInterface::PIPE_TOKEN)) {
+                $types['paramTypes'][] = self::flush();
+                self::next();
+            }
+            self::buffering();
+            self::next();
+        }
+        $types['paramTypes'][] = self::flush();
+
+        self::skip();
+        if (self::isA(DocBlockTokenInterface::DOLLAR_TOKEN)) {
+            while (self::$iterator < self::$tokenLength && !self::isA(self::SKIPPED_TOKEN)) {
+                self::buffering();
+                self::next();
+            }
+
+            $types['param'] = self::flush();
+        }
+
+        return $types;
+    }
+
     /**
      * handle param of an annotation.
      *
@@ -255,17 +282,17 @@ class DocBlockAnalyser
         $param = null;
         if (self::isA(self::OPEN_STRING_TOKEN)) {
             $param = [
-                self::PARAM_TYPE_KEY => self::STRING_TYPE,
+                self::PARAM_TYPE_KEY => TypeInterface::STRING_TYPE,
                 self::PARAM_VALUE_KEY => self::handleStringParam($annotation),
             ];
         } elseif (self::isA(DocBlockTokenInterface::OPEN_CURLY_BRACE_TOKEN)) {
             $param = [
-                self::PARAM_TYPE_KEY => self::OBJECT_TYPE,
+                self::PARAM_TYPE_KEY => TypeInterface::OBJECT_TYPE,
                 self::PARAM_VALUE_KEY => self::handleObject($annotation),
             ];
         } elseif (self::isA(DocBlockTokenInterface::AROBASE_TOKEN)) {
             $param = [
-                self::PARAM_TYPE_KEY => self::ANNOTATION_TYPE,
+                self::PARAM_TYPE_KEY => TypeInterface::ANNOTATION_TYPE,
                 self::PARAM_VALUE_KEY => self::handleAnnotations(),
             ];
         } else {
@@ -294,6 +321,7 @@ class DocBlockAnalyser
         while (self::$iterator < self::$tokenLength && !self::isA([
             PHP_EOL,
             DocBlockTokenInterface::EMPTY_TOKEN,
+            DocBlockTokenInterface::EQUAL_TOKEN,
             DocBlockTokenInterface::COMMA_TOKEN,
             DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
             DocBlockTokenInterface::CLOSE_PARENTHESIS_TOKEN,
@@ -321,18 +349,18 @@ class DocBlockAnalyser
     protected static function getConstantType($constant): int
     {
         if (empty($constant)) {
-            return self::OTHER_CONSTANT_TYPE;
+            return TypeInterface::OTHER_CONSTANT_TYPE;
         }
 
         if (false !== strpos($constant, '::')) {
-            return self::CLASS_CONSTANT_TYPE;
+            return TypeInterface::CLASS_CONSTANT_TYPE;
         }
 
         if (is_numeric($constant)) {
-            return self::NUMBER_CONSTANT_TYPE;
+            return TypeInterface::NUMBER_CONSTANT_TYPE;
         }
 
-        return self::OTHER_CONSTANT_TYPE;
+        return TypeInterface::OTHER_CONSTANT_TYPE;
     }
 
     /**
@@ -407,8 +435,7 @@ class DocBlockAnalyser
                     $currentKey = null;
                 }
             } else {
-                // @TODO: create method to stringify params value
-                throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation.' on key or value : '.($currentKey ? $currentKey[self::PARAM_VALUE_KEY] : $param[self::PARAM_VALUE_KEY]));
+                throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation);
             }
 
             if (self::isA([

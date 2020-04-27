@@ -32,4 +32,6 @@ interface DocBlockTokenInterface
     public const OPEN_PARENTHESIS_TOKEN = '(';
     public const CLOSE_PARENTHESIS_TOKEN = ')';
     public const EQUAL_TOKEN = '=';
+    public const DOLLAR_TOKEN = '$';
+    public const PIPE_TOKEN = '|';
 }
