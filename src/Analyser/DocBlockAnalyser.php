@@ -1,21 +1,53 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Analyser;
+namespace Aplorm\Lexer\Analyser;
 
-use Orm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
+/**
+ * Analyse a docBlock to extract Annotation data.
+ */
 class DocBlockAnalyser
 {
+    /**
+     * all the tokens find in docbloc.
+     *
+     * @var array<string>
+     */
     protected static array $tokens = [];
 
+    /**
+     * contains the current analyzed value.
+     *
+     * @var array<string>
+     */
     protected static array $buffer = [];
 
+    /**
+     * position in self::$tokens.
+     */
     protected static int $iterator = 0;
 
+    /**
+     * number of tokens.
+     */
     protected static int $tokenLength = 0;
 
+    /**
+     * current token.
+     *
+     * @var string
+     */
     protected static ?string $token = '';
 
     protected const PARAM_VALUE_KEY = 'value';
@@ -24,6 +56,7 @@ class DocBlockAnalyser
 
     protected const PARAM_TYPE_KEY = 'type';
 
+    // TODO : Put type constant into an interface
     protected const STRING_TYPE = 1;
     protected const CLASS_CONSTANT_TYPE = 2;
     protected const OTHER_CONSTANT_TYPE = 3;
@@ -32,6 +65,9 @@ class DocBlockAnalyser
     protected const OBJECT_TYPE = 6;
     protected const ANNOTATION_TYPE = 7;
 
+    /**
+     * token that open string in annotation.
+     */
     protected const OPEN_STRING_TOKEN = [
         '"',
         '\'',
@@ -49,6 +85,50 @@ class DocBlockAnalyser
         DocBlockTokenInterface::EMPTY_TOKEN,
     ];
 
+    protected const EXCLUED_ANNOTATIONS = [
+        'example',
+        'internal',
+        'inheritdoc',
+        'link',
+        'see',
+        'api',
+        'author',
+        'category',
+        'copyright',
+        'deprecated',
+        'example',
+        'filesource',
+        'global',
+        'ignore',
+        'internal',
+        'license',
+        'link',
+        'method',
+        'package',
+        'param',
+        'property',
+        'property-read',
+        'property-write',
+        'return',
+        'see',
+        'since',
+        'source',
+        'subpackage',
+        'throws',
+        'todo',
+        'uses',
+        'used-by',
+        'var',
+        'version',
+    ];
+
+    /**
+     * @param string $blocComment The docBloc who may contains annotation
+     *
+     * @throws AnnotationSyntaxException if dockblock is not correctly formed
+     *
+     * @return mixed[] list of all anotation found in docBloc
+     */
     public static function &analyse(string $blocComment): array
     {
         $annotations = [];
@@ -57,7 +137,9 @@ class DocBlockAnalyser
             self::skip();
             if (self::isA(DocBlockTokenInterface::AROBASE_TOKEN)) {
                 $annotation = self::handleAnnotations();
-                $annotations[] = $annotation;
+                if (null !== $annotation) {
+                    $annotations[] = $annotation;
+                }
             }
 
             self::next();
@@ -66,7 +148,14 @@ class DocBlockAnalyser
         return $annotations;
     }
 
-    private static function handleAnnotations(): array
+    /**
+     * Analyse an annoation in docBloc.
+     *
+     * @throws AnnotationSyntaxException if annotation could not be parsed
+     *
+     * @return array<string, string|array> the current annotations
+     */
+    private static function handleAnnotations(): ?array
     {
         $annotation = [
             'name' => null,
@@ -88,8 +177,11 @@ class DocBlockAnalyser
         if (self::$iterator >= self::$tokenLength) {
             throw new AnnotationSyntaxException('Unable to parse docblock got : '.self::flush());
         }
-
-        $annotation['name'] = self::flush();
+        $name = self::flush();
+        if (\in_array($name, self::EXCLUED_ANNOTATIONS, true)) {
+            return null;
+        }
+        $annotation['name'] = $name;
 
         if (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
             $annotation['params'] = self::handleAnnotationParams($annotation['name']);
@@ -98,6 +190,15 @@ class DocBlockAnalyser
         return $annotation;
     }
 
+    /**
+     * handle params of an annotation.
+     *
+     * @param string $annotation the current annotations name
+     *
+     * @throws AnnotationSyntaxException if params is not correctly setup in annotation
+     *
+     * @return array<array<string, string|array>> an array of params analyzed
+     */
     protected static function handleAnnotationParams(string $annotation): array
     {
         $params = [];
@@ -111,7 +212,7 @@ class DocBlockAnalyser
                     throw new AnnotationSyntaxException('missing name for param');
                 }
             }
-            $lastParam = self::handleParams($annotation);
+            $lastParam = self::handleParam($annotation);
             if (self::isA(DocBlockTokenInterface::EQUAL_TOKEN)) {
                 if (self::OTHER_CONSTANT_TYPE !== $lastParam[self::PARAM_TYPE_KEY]) {
                     throw new AnnotationSyntaxException('param name must be a constant');
@@ -141,7 +242,14 @@ class DocBlockAnalyser
         return $params;
     }
 
-    protected static function handleParams(string $annotation)
+    /**
+     * handle param of an annotation.
+     *
+     * @param string $annotation the current annotation
+     *
+     * @return array<string, mixed>|null         the param analyzed
+     */
+    protected static function handleParam(string $annotation)
     {
         self::skip();
         $param = null;
@@ -172,7 +280,16 @@ class DocBlockAnalyser
         return $param;
     }
 
-    protected static function handleConstant(string $annotation)
+    /**
+     * handle constant param such has boolean value, number value.
+     *
+     * @param string $annotation the current annotation
+     *
+     * @throws AnnotationSyntaxException if constant is not correctly formed
+     *
+     * @return string|null the constant value
+     */
+    protected static function handleConstant(string $annotation): ?string
     {
         while (self::$iterator < self::$tokenLength && !self::isA([
             PHP_EOL,
@@ -192,7 +309,16 @@ class DocBlockAnalyser
         return self::flush();
     }
 
-    protected static function getConstantType($constant)
+    /**
+     * anaylzed constant and retur the correspondant type.
+     *
+     * @param mixed $constant the analyzed constant
+     *
+     * @return int the analzyd constant type
+     *
+     * @see the type constant in DockBlockAnalyser class
+     */
+    protected static function getConstantType($constant): int
     {
         if (empty($constant)) {
             return self::OTHER_CONSTANT_TYPE;
@@ -209,6 +335,15 @@ class DocBlockAnalyser
         return self::OTHER_CONSTANT_TYPE;
     }
 
+    /**
+     * handle string params.
+     *
+     * @param string $annotation the current annotation name
+     *
+     * @throws AnnotationSyntaxException if object is not correctly formed
+     *
+     * @return string the string value
+     */
     protected static function handleStringParam(string $annotation): string
     {
         $startToken = self::tokenValue();
@@ -237,6 +372,15 @@ class DocBlockAnalyser
         return self::flush();
     }
 
+    /**
+     * handle object has parameter.
+     *
+     * @param string $annotation the current annotation
+     *
+     * @throws AnnotationSyntaxException if object is not correctly formed
+     *
+     * @return array<mixed, mixed> if object is not correctly formed
+     */
     protected static function handleObject(string $annotation): array
     {
         $params = [];
@@ -244,7 +388,7 @@ class DocBlockAnalyser
         self::next();
         while (self::$iterator < self::$tokenLength && !self::isA(DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN)) {
             self::skip();
-            $param = self::handleParams($annotation);
+            $param = self::handleParam($annotation);
 
             if (self::isA(self::OBJECT_SEPARATOR_TOKEN)) {
                 $currentKey = $param;
@@ -252,8 +396,8 @@ class DocBlockAnalyser
                 DocBlockTokenInterface::COMMA_TOKEN,
                 DocBlockTokenInterface::EMPTY_TOKEN,
                 DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
-            ])) {
-                if (null === $currentKey && (null === $param || empty($param['value']))) {
+            ]) && null !== $param) {
+                if (null === $currentKey && empty($param[self::PARAM_VALUE_KEY])) {
                     throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation);
                 }
                 if (null === $currentKey) {
@@ -263,7 +407,8 @@ class DocBlockAnalyser
                     $currentKey = null;
                 }
             } else {
-                throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation.' on key or value : '.($currentKey ? $currentKey : $param));
+                // @TODO: create method to stringify params value
+                throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation.' on key or value : '.($currentKey ? $currentKey[self::PARAM_VALUE_KEY] : $param[self::PARAM_VALUE_KEY]));
             }
 
             if (self::isA([
@@ -280,12 +425,22 @@ class DocBlockAnalyser
         return $params;
     }
 
-    protected static function tokenise(string &$blocComment)
+    /**
+     * split docBlock into analyzable.
+     *
+     * @param string $blocComment the docBlock to analyse
+     */
+    protected static function tokenise(string &$blocComment): void
     {
         self::$tokens = str_split($blocComment);
     }
 
-    protected static function init(string &$blocComment)
+    /**
+     * init Analyser.
+     *
+     * @param string $blocComment the docBlock to analyse
+     */
+    protected static function init(string &$blocComment): void
     {
         self::tokenise($blocComment);
 
@@ -294,7 +449,10 @@ class DocBlockAnalyser
         self::$token = self::tokenValue();
     }
 
-    protected static function next()
+    /**
+     * move interator to the next cursor.
+     */
+    protected static function next(): void
     {
         ++self::$iterator;
         self::$token = self::tokenValue();
@@ -304,11 +462,19 @@ class DocBlockAnalyser
         }
     }
 
-    protected static function buffering()
+    /**
+     * add current token into buffer.
+     */
+    protected static function buffering(): void
     {
         self::$buffer[] = self::tokenValue();
     }
 
+    /**
+     * transform buffer into string.
+     *
+     * @return ?string the buffer transform into string
+     */
     protected static function flush(): ?string
     {
         $bufferContent = implode('', self::$buffer);
@@ -317,15 +483,25 @@ class DocBlockAnalyser
         return $bufferContent;
     }
 
-    protected static function skip()
+    /**
+     * move iterator while token are in skipped_token.
+     *
+     * @return false to allow used into loop
+     */
+    protected static function skip(): bool
     {
-        while (self::isA(self::SKIPPED_TOKEN)) {
+        while (self::$iterator < self::$tokenLength && self::isA(self::SKIPPED_TOKEN)) {
             self::next();
         }
 
         return false;
     }
 
+    /**
+     * test if current token is equal or one of provided token.
+     *
+     * @param string|string[] $tokens the expected type
+     */
     protected static function isA($tokens): bool
     {
         if (!\is_array($tokens)) {
@@ -335,7 +511,12 @@ class DocBlockAnalyser
         return \in_array(self::$token, $tokens, true);
     }
 
-    protected static function tokenValue()
+    /**
+     * return the current token value.
+     *
+     * @return string|null the current token value
+     */
+    protected static function tokenValue(): ?string
     {
         return self::$tokens[self::$iterator] ?? null;
     }

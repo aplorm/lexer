@@ -12,6 +12,13 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Sample;
 
-interface DummyInterface
+use Aplorm\Lexer\Tests\Sample\SubNamespace\ {
+    DummyClass,
+    FooClass as FC
+};
+
+class GroupUseClassTest
 {
+    private DummyClass $dc;
+    private FC $dc2;
 }

@@ -1,12 +1,20 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Analyser\CommentAnalyser;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Analyser\DocBlockAnalyser;
-use Orm\Lexer\Tests\Lexer\Lexer\Analyser\Traits\AnnotationProviderTrait;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
+use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\AnnotationProviderTrait;
 
 class SuccessTest extends AbstractTest
 {
@@ -15,14 +23,14 @@ class SuccessTest extends AbstractTest
     /**
      * function call in setUp function.
      */
-    protected function doSetup()
+    protected function doSetup(): void
     {
     }
 
     /**
      * function call in tearDown function.
      */
-    protected function doTearDown()
+    protected function doTearDown(): void
     {
     }
 
@@ -37,7 +45,7 @@ class SuccessTest extends AbstractTest
     /**
      * @dataProvider annotationProvider
      */
-    public function testAnnotation($docBloc, $count, $name)
+    public function testAnnotation(string $docBloc, int $count, string $name): void
     {
         $annotations = DocBlockAnalyser::analyse($docBloc);
 
@@ -49,7 +57,7 @@ class SuccessTest extends AbstractTest
     /**
      * @dataProvider annotationParamLengthProvider
      */
-    public function testParamsLength($docBloc, $length)
+    public function testParamsLength(string $docBloc, int $length): void
     {
         $annotations = DocBlockAnalyser::analyse($docBloc);
         self::assertEquals($length, \count($annotations[0]['params']));
@@ -58,13 +66,13 @@ class SuccessTest extends AbstractTest
     /**
      * @dataProvider annotationObjectParamProvider
      */
-    public function testObjectKey($docBloc, $key)
+    public function testObjectKey(string $docBloc, string $key): void
     {
         $annotations = DocBlockAnalyser::analyse($docBloc);
         self::assertArrayHasKey($key, $annotations[0]['params'][0]['value']);
     }
 
-    public function testNamedParameter()
+    public function testNamedParameter(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -76,10 +84,21 @@ EOD;
         self::assertEquals('namedParameter', $annotations[0]['params'][0]['name']);
     }
 
+    public function testExcluedAnnotation(): void
+    {
+        $docBloc = <<<'EOD'
+/**
+ *  @param
+ */
+EOD;
+        $annotations = DocBlockAnalyser::analyse($docBloc);
+        self::assertEquals(0, \count($annotations));
+    }
+
     /**
      * @dataProvider annotationStringProvider
      */
-    public function testStringParameter($docBloc, $value)
+    public function testStringParameter(string $docBloc, string $value): void
     {
         $annotations = DocBlockAnalyser::analyse($docBloc);
         self::assertEquals($value, $annotations[0]['params'][0]['value']);

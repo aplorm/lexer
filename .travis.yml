@@ -1,0 +1,12 @@
+language: php
+php:
+  - '7.4.3'
+install:
+  - composer install
+script:
+  - vendor/bin/phpunit --coverage-clover coverage.xml
+
+after_script:
+  # upload coverage.xml file to Coveralls to analyze it
+  # minimal required coverage is set to 80+ %
+  - php coveralls.phar --verbose

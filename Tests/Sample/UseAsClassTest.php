@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Sample;
 
-interface DummyInterface
+use Aplorm\Lexer\Tests\Sample\SubNamespace\DummyClass as DC;
+
+class UseAsClassTest
 {
+    private DC $dc;
 }

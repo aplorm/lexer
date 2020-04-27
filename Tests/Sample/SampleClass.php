@@ -1,8 +1,18 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Tests\Sample;
+
+use Aplorm\Lexer\Exception\ClassNotFoundException;
 
 /**
  * class comment.
@@ -37,21 +47,21 @@ class SampleClass extends DummyClass implements DummyInterface, FooInterface
     private ?bool $nullable = null;
 
     // line comment
-    private string $string = "une string avec des espaces";
+    private string $string = 'une string avec des espaces';
 
-    public $docBloc = <<<EOD
+    public $docBloc = <<<'EOD'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOD;
 
-    public $eot = <<<EOT
+    public $eot = <<<'EOT'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOT;
 
-    public $foobar = <<<FOOBAR
+    public $foobar = <<<'FOOBAR'
 /**
  *  @annotation(namedParameter = 'test')
  */
@@ -60,7 +70,57 @@ FOOBAR;
     // bloc simple comment
     private ?ClassNotFoundException $class;
 
-    public function mafunction($param1, $param2): bool
+    private array $array = [
+        ['A' => 'B'],
+        ['A', 'B'],
+        'A',
+    ];
+
+    private array $array2 = [
+        ['A' => 'B'],
+        ['A', 'B'],
+        'A',
+    ];
+
+    /**
+     * [mafunction description].
+     *
+     * @param string $param1 [description]
+     * @param array  $param2 [description]
+     *
+     * @return [type] [description]
+     *
+     * @annotationValid
+     */
+    public function mafunction(string $param1, array $param2): bool
+    {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction4(
+        string $param1,
+        array $param2
+    ): bool {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction2(string $param1 = 'bla', array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
+    {
+        if (true) {
+        }
+
+        return true;
+    }
+
+    public function mafunction3(string $param1 = <<<'EOT'
+        bla bla
+    EOT , array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
         if (true) {
         }

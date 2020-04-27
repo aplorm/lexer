@@ -1,5 +1,18 @@
 <?php
 
+$header = <<<'EOD'
+ This file is part of the Aplorm package.
+
+ (c) Nicolas Moral <n.moral@live.fr>
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+EOD;
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude(['Tests/Sample'])
+    ->in(__DIR__)
+;
 return PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
@@ -9,7 +22,12 @@ return PhpCsFixer\Config::create()
         '@Symfony:risky' => true,
         '@PHP71Migration' => true,
         '@PHP71Migration:risky' => true,
-
+        'header_comment' => [
+            'commentType' => 'PHPDoc',
+            'header' => $header,
+            'location' => 'after_open',
+            'separate' => 'bottom',
+        ],
         'align_multiline_comment' => [
             'comment_type' => 'all_multiline',
         ],
@@ -30,9 +48,6 @@ return PhpCsFixer\Config::create()
             'functions' => ['get_called_class', 'get_class', 'php_sapi_name', 'phpversion', 'pi'],
         ],
         'hash_to_slash_comment' => true,
-        'header_comment' => [
-            'header' => '',
-        ],
         'heredoc_to_nowdoc' => true,
         'linebreak_after_opening_tag' => true,
         'logical_operators' => true,
@@ -84,9 +99,10 @@ return PhpCsFixer\Config::create()
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
+            ->exclude(['Sample'])
             ->in([
                 __DIR__.'/src',
-                __DIR__.'/tests',
+                __DIR__.'/Tests',
             ])
     )
 ;

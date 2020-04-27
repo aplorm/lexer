@@ -10,8 +10,8 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Tests\Sample\SubNamespace;
 
-interface DummyInterface
+class DummyClass
 {
 }

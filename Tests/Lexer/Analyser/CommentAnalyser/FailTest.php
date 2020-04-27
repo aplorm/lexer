@@ -1,26 +1,34 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer\Analyser\CommentAnalyser;
+namespace Aplorm\Lexer\Tests\Lexer\Analyser\CommentAnalyser;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Analyser\DocBlockAnalyser;
-use Orm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
 class FailTest extends AbstractTest
 {
     /**
      * function call in setUp function.
      */
-    protected function doSetup()
+    protected function doSetup(): void
     {
     }
 
     /**
      * function call in tearDown function.
      */
-    protected function doTearDown()
+    protected function doTearDown(): void
     {
     }
 
@@ -32,7 +40,7 @@ class FailTest extends AbstractTest
     {
     }
 
-    public function testWrongDocBlock()
+    public function testWrongDocBlock(): void
     {
         $docBloc = <<<'EOD'
 /*** @annotation*/
@@ -43,7 +51,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testMissignParenthesis()
+    public function testMissignParenthesis(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -55,7 +63,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongParamFormat()
+    public function testWrongParamFormat(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -68,7 +76,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongStringFormat()
+    public function testWrongStringFormat(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -81,7 +89,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongEndString()
+    public function testWrongEndString(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -94,7 +102,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongObjectFormat()
+    public function testWrongObjectFormat(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -107,7 +115,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongObjectEndFormat()
+    public function testWrongObjectEndFormat(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -119,7 +127,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongDoublComaInObject()
+    public function testWrongDoublComaInObject(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -132,7 +140,7 @@ EOD;
         $lexer = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testNoNameNamedParameter()
+    public function testNoNameNamedParameter(): void
     {
         $docBloc = <<<'EOD'
 /**
@@ -144,7 +152,7 @@ EOD;
         $annotations = DocBlockAnalyser::analyse($docBloc);
     }
 
-    public function testWrongNameNamedParameter()
+    public function testWrongNameNamedParameter(): void
     {
         $docBloc = <<<'EOD'
 /**

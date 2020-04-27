@@ -1,48 +1,118 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Analyser;
+namespace Aplorm\Lexer\Analyser;
 
-use Orm\Lexer\Exception\PhpSyntaxException;
+use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
+/**
+ * Analyse token extract from php file with token_get_all method.
+ */
 class TokenAnalyser
 {
+    use CommonAnalyserTraits;
+
+    /**
+     * current analyzed data.
+     *
+     * @var array<string>
+     */
     private static array $buffer = [];
 
+    /**
+     * current token.
+     *
+     * @var array<int|string>
+     */
     private static ?array $token = null;
 
+    /**
+     * previous analyzed token.
+     *
+     * @var array<int|string>
+     */
     private static ?array $previousToken = null;
 
+    /**
+     * previous visibility find during analyzed.
+     */
     private static ?string $previousVisibility = null;
 
+    /**
+     * used during element analyzed to determine if element is nullable.
+     */
     private static bool $nullable = false;
 
+    /**
+     * the current element type.
+     */
     private static ?string $type = null;
 
+    /**
+     * the last annotations found during analyzed.
+     *
+     * @var mixed[]
+     *
+     * @see DockBlockAnalyser::analyse
+     */
     private static ?array $lastAnnotations = null;
 
+    /**
+     * all the token find with get_all_token method.
+     *
+     * @var array<mixed>
+     */
     private static array $tokens = [];
 
+    /**
+     * current position in token array.
+     */
     private static int $iterator = 0;
 
+    /**
+     * size of the token array.
+     */
     private static int $tokenLength = 0;
 
-    private const NAMESPACE_PART = 'namespace';
-    private const CLASS_NAME_PART = 'classname';
-    private const CLASS_ALIASES = 'classalias';
-    private const VARIABLE_PART = 'variables';
-    private const USE_PART = 'use';
+    public const NAMESPACE_PART = 'namespace';
+    public const CLASS_NAME_PART = 'classname';
+    public const CLASS_ALIASES = 'classalias';
+    public const VARIABLE_PART = 'variables';
+    public const FUNCTION_PART = 'functions';
+    public const USE_PART = 'use';
 
+    /**
+     * parts find during analyzed.
+     *
+     * @var array<string, mixed>
+     */
     private static array $parts = [
         self::NAMESPACE_PART => null,
         self::CLASS_NAME_PART => null,
         self::CLASS_ALIASES => [],
         self::USE_PART => [],
         self::VARIABLE_PART => [],
+        self::FUNCTION_PART => [],
     ];
 
-    public static function analyse(array &$tokens): void
+    /**
+     * analyse tokens from get_all_token.
+     *
+     * @param array<mixed> $tokens the tokens to analyse
+     *
+     * @return array<mixed> all the data parsed from tokens
+     */
+    public static function &analyse(array &$tokens): array
     {
         self::init($tokens);
 
@@ -56,17 +126,20 @@ class TokenAnalyser
                 self::handleClassName();
             } elseif (self::isA(TokenNameInterface::DOC_COMMENT_TOKEN)) {
                 self::handleDocComment();
-            } else if (self::isA(TokenNameInterface::VISIBILITY_TOKENS)) {
+            } elseif (self::isA(TokenNameInterface::VISIBILITY_TOKENS)) {
                 self::handleElement();
             }
-            // echo self::$token[1], PHP_EOL;
-            // self::debug();
+
             self::next();
         }
-        var_dump(self::$parts[self::VARIABLE_PART]);
+
+        return self::$parts;
     }
 
-    protected static function handleClassName()
+    /**
+     * analyzed class name.
+     */
+    protected static function handleClassName(): void
     {
         while (self::$iterator < self::$tokenLength && !self::isA(TokenNameInterface::STRING_TOKEN)) {
             self::next();
@@ -74,6 +147,7 @@ class TokenAnalyser
 
         self::buffering();
         $className = self::flush();
+        /** @var string */
         $namespace = self::getSpecificPart(self::NAMESPACE_PART);
         $fullyClassName = sprintf('%s\\%s', $namespace, $className);
 
@@ -86,16 +160,26 @@ class TokenAnalyser
 
         self::$lastAnnotations = null;
 
-        self::addBufferToPart(self::CLASS_NAME_PART, $className, $classData);
+        self::addDataToPart(self::CLASS_NAME_PART, $className, $classData);
     }
 
-    protected static function handleDocComment()
+    /**
+     * Analyse docBlock.
+     *
+     * @throws AnnotationSyntaxException if dockblock is not correctly formed
+     */
+    protected static function handleDocComment(): void
     {
         self::$lastAnnotations = DocBlockAnalyser::analyse(self::tokenValue());
         self::next();
     }
 
-    protected static function handleNamespace(bool $classNamespace = false)
+    /**
+     * analyse namespace.
+     *
+     * @param bool|bool $classNamespace set to true if the file namespace
+     */
+    protected static function handleNamespace(bool $classNamespace = false): void
     {
         self::next();
         $namespaceBase = null;
@@ -110,7 +194,7 @@ class TokenAnalyser
                 $namespaceBase = self::flush();
             } elseif (self::isA(TokenNameInterface::AS_TOKEN)) {
                 if (null !== $namespaceBase) {
-                    $fullNamespace = sprintf('%s\\%s', $namespaceBase, self::flush());
+                    $fullNamespace = sprintf('%s%s', $namespaceBase, self::flush());
                 } else {
                     $fullNamespace = self::flush();
                 }
@@ -118,94 +202,47 @@ class TokenAnalyser
                 TokenNameInterface::CLOSE_CURLY_BRACE_TOKEN,
                 TokenNameInterface::COMMA_TOKEN,
             ])) {
-                self::addNamespaceToPart($fullNamespace, $baseNamespace);
-                $fullNamespace = $namespaceBase = null;
+                self::addNamespaceToPart($fullNamespace, $namespaceBase, $classNamespace);
+                $fullNamespace = null;
+                if (self::isA(TokenNameInterface::CLOSE_CURLY_BRACE_TOKEN)) {
+                    $namespaceBase = null;
+                }
             } else {
                 self::buffering();
             }
 
             self::next();
         }
-
-        self::addNamespaceToPart($fullNamespace, $baseNamespace);
-        if ($classNamespace) {
-            self::$parts[self::NAMESPACE_PART] = $fullNamespace;
-        }
+        self::addNamespaceToPart($fullNamespace, $namespaceBase, $classNamespace);
     }
 
-    protected static function handleElement()
+    protected static function handleElement(): void
     {
-        self::$previousVisibility = self::tokenValue();
-        self::next();
-        self::$nullable = false;
-        self::$type = null;
-        while (self::$iterator < self::$tokenLength && !self::isA([
-            TokenNameInterface::VARIABLE_TOKEN,
-            TokenNameInterface::FUNCTION_TOKEN,
-        ])) {
-            self::debug();
-            // self::skip();
-            if (self::isA(TokenNameInterface::CONSTANT_TOKEN)) {
-                break;
-            }
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse(self::$lastAnnotations);
+        if (null === $partType) {
+            return;
+        }
 
-            if (self::isA(TokenNameInterface::QUESTION_MARK_TOKEN)) {
-                self::$nullable = true;
-                self::next();
-                self::skip();
-                if (self::isA(TokenNameInterface::STRING_TOKEN)) {
-                    self::$type = self::tokenValue();
-                } else {
-                    throw new PhpSyntaxException('Question mark must followed by a type');
-                }
-            } elseif (self::isA(TokenNameInterface::STRING_TOKEN)) {
-                self::$type = self::tokenValue();
-            }
-            self::next();
-        }
-        if (self::isA(TokenNameInterface::VARIABLE_TOKEN)) {
-            self::handleVariable();
-        }
+        self::addDataToPart($partType, $partName, $partData);
     }
 
-    protected static function handleVariable()
-    {
-        self::buffering();
-        $variableName = self::flush();
-
-        $varData = [
-            'name' => $variableName,
-            'visibility' => self::$previousVisibility,
-            'nullable' => self::$nullable,
-            'type' => self::$type,
-            'annotations' => self::$lastAnnotations,
-        ];
-
-        self::$lastAnnotations = null;
-        self::$previousVisibility = null;
-        self::$nullable = false;
-        self::$type = null;
-        self::handleVariableDefaultValue();
-        self::addBufferToPart(self::VARIABLE_PART, $variableName, $varData);
-    }
-
-    protected static function handleVariableDefaultValue()
-    {
-        while (self::$iterator < self::$tokenLength && !self::isA([
-            TokenNameInterface::SEMI_COLON_TOKEN,
-        ])) {
-            self::skip();
-            self::debug();
-            self::next();
-        }
-    }
-
-    protected static function addNamespaceToPart(?string &$fullNamespace = null, ?string $baseNamespace = null)
+    /**
+     * Add namespace to analyser part.
+     *
+     * @param string|null $fullNamespace  the full namespace
+     * @param string|null $baseNamespace  a base namespace for group use case
+     * @param bool        $classNamespace handle classNamespace case
+     */
+    protected static function addNamespaceToPart(?string &$fullNamespace = null, ?string $baseNamespace = null, bool $classNamespace = false): void
     {
         if (null === $fullNamespace) {
             $alias = self::previousTokenValue();
-            if (null !== $namespaceBase) {
-                $fullNamespace = sprintf('%s%s%s', $namespaceBase, TokenNameInterface::NS_SEPARATOR_TOKEN, self::flush());
+            if (null !== $baseNamespace) {
+                $fullNamespace = sprintf('%s%s', $baseNamespace, self::flush());
             } else {
                 $fullNamespace = self::flush();
             }
@@ -213,108 +250,76 @@ class TokenAnalyser
             $alias = self::flush();
         }
 
-        self::addBufferToPart(self::USE_PART, $fullNamespace);
-        self::addBufferToPart(self::CLASS_ALIASES, $alias, $fullNamespace);
+        if (empty($fullNamespace)) {
+            return;
+        }
+
+        if ($classNamespace) {
+            self::addDataToPart(self::NAMESPACE_PART, null, $fullNamespace);
+        } else {
+            self::addDataToPart(self::USE_PART, $fullNamespace);
+            self::addDataToPart(self::CLASS_ALIASES, $alias, $fullNamespace);
+        }
     }
 
-    protected static function buffering()
+    /**
+     * Add data to specific part.
+     *
+     * @param string      $part  the target part
+     * @param string|null $key   the part name as key
+     * @param mixed       $value the value of part, true if not provided
+     */
+    protected static function addDataToPart(string $part, ?string $key, &$value = true): void
     {
-        self::$buffer[] = self::tokenValue();
-    }
+        if (null === $key) {
+            self::$parts[$part] = $value;
 
-    protected static function flush()
-    {
-        $bufferContent = implode('', self::$buffer);
-        self::$buffer = [];
+            return;
+        }
 
-        return $bufferContent;
-    }
-
-    protected static function addBufferToPart(string $part, string $key, &$value = true)
-    {
         self::$parts[$part][$key] = $value;
     }
 
-    protected static function skip(): bool
-    {
-        $skip = false;
-        while (self::isA(
-            [
-                TokenNameInterface::WHITESPACE_TOKEN,
-                TokenNameInterface::EMPTY_TOKEN,
-            ]
-        )) {
-            self::next();
-            $skip = true;
-        }
-
-        return $skip;
-    }
-
-    protected static function next()
-    {
-        ++self::$iterator;
-        self::readToken();
-    }
-
+    /**
+     * init analyser.
+     *
+     * @param array<mixed> $tokens the tokens to analyse
+     *
+     * @codeCoverageIgnore
+     */
     protected static function init(array &$tokens): void
     {
+        self::$buffer = [];
+        self::$parts = [
+            self::NAMESPACE_PART => null,
+            self::CLASS_NAME_PART => null,
+            self::CLASS_ALIASES => [],
+            self::USE_PART => [],
+            self::VARIABLE_PART => [],
+            self::FUNCTION_PART => [],
+        ];
+        self::$previousToken = null;
+        self::$previousVisibility = null;
+        self::$nullable = false;
+        self::$type = null;
+        self::$lastAnnotations = null;
+        self::$token = self::$previousToken = null;
         self::$tokenLength = \count($tokens);
         self::$iterator = 0;
-        self::readToken();
         self::$tokens = &$tokens;
+        self::readToken();
+        ClassPartAnalyser::init(self::$tokens, self::$iterator, self::$tokenLength);
     }
 
-    protected static function readToken()
-    {
-        if (\is_string(self::$tokens[self::$iterator])) {
-            $value = self::$tokens[self::$iterator];
-            self::$tokens[self::$iterator] = [
-                self::getCustomToken($value),
-                $value,
-            ];
-        }
-        self::$token = &self::$tokens[self::$iterator];
-
-        if (0 !== self::$iterator) {
-            self::$previousToken = &self::$tokens[(self::$iterator - 1)];
-        }
-    }
-
-    protected static function tokenValue(): string
-    {
-        return trim(self::$token[1]);
-    }
-
-    protected static function previousTokenValue()
-    {
-        return self::$previousToken[1];
-    }
-
+    /**
+     * return a specifi part.
+     *
+     * @param string $part the part name
+     *
+     * @return array<mixed>|string|bool
+     */
     protected static function getSpecificPart(string $part)
     {
         return self::$parts[$part];
-    }
-
-    protected static function getCustomToken(string &$value)
-    {
-        return TokenNameInterface::CUSTOM_TOKEN[$value] ?? null;
-    }
-
-    protected static function isA($tokens): bool
-    {
-        if (!\is_array($tokens)) {
-            $tokens = [$tokens];
-        }
-
-        return \in_array(self::$token[0], $tokens, true);
-    }
-
-    protected static function debug()
-    {   if (\is_int(self::$token[0])) {
-            echo self::$token[0], ' ', token_name(self::$token[0]), ' ', self::$token[1], '' , PHP_EOL;
-        } else {
-            echo self::$token[0], ' ', 'CUSTOM_TOKEN', ' ', self::$token[1], '' , PHP_EOL;
-        }
     }
 }

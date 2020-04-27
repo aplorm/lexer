@@ -10,8 +10,16 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Exception;
 
-interface DummyInterface
+use Exception;
+
+class FileCorruptedException extends Exception
 {
+    private const CODE = 0X4C4;
+
+    public function __construct(string $file)
+    {
+        parent::__construct('unable to open file :'.$file, self::CODE);
+    }
 }

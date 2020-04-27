@@ -1,26 +1,34 @@
 <?php
+/**
+ *  This file is part of the Aplorm package.
+ *
+ *  (c) Nicolas Moral <n.moral@live.fr>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 declare(strict_types=1);
 
-namespace Orm\Lexer\Tests\Lexer\Lexer;
+namespace Aplorm\Lexer\Tests\Lexer\Lexer;
 
-use Orm\Common\Test\AbstractTest;
-use Orm\Lexer\Exception\ClassNotFoundException;
-use Orm\Lexer\Lexer\Lexer;
+use Aplorm\Common\Test\AbstractTest;
+use Aplorm\Lexer\Exception\FileNotFoundException;
+use Aplorm\Lexer\Lexer\Lexer;
 
 class FailTest extends AbstractTest
 {
     /**
      * function call in setUp function.
      */
-    protected function doSetup()
+    protected function doSetup(): void
     {
     }
 
     /**
      * function call in tearDown function.
      */
-    protected function doTearDown()
+    protected function doTearDown(): void
     {
     }
 
@@ -32,10 +40,10 @@ class FailTest extends AbstractTest
     {
     }
 
-    public function testLexer()
+    public function testLexer(): void
     {
-        $this->expectException(ClassNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
 
-        $lexer = Lexer::analyse('\\Dummy\\Class');
+        Lexer::analyse('dummyFile.php');
     }
 }

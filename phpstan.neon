@@ -1,0 +1,4 @@
+parameters:
+    excludes_analyse:
+        - tests/Sample
+    checkGenericClassInNonGenericObjectType: false
