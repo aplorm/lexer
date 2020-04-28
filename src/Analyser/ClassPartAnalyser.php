@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Analyser;
 
-use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
 use Aplorm\Common\Lexer\LexedPartInterface;
+use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
 
 /**
  * Analyse variable and function part of a class.
@@ -57,6 +57,11 @@ class ClassPartAnalyser
      * the current element type.
      */
     private static ?string $type = null;
+
+    /**
+     * Set to true is default value of an elemeent is a constant.
+     */
+    private static ?bool $isValueAConstant = null;
 
     /**
      * the last annotations found during analyzed.
@@ -191,6 +196,9 @@ class ClassPartAnalyser
         self::$nullable = false;
         self::$type = null;
         $varData['value'] = self::handleVariableDefaultValue($variableName);
+        if (null !== self::$isValueAConstant) {
+            $varData['isValueAConstant'] = self::$isValueAConstant;
+        }
 
         return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
     }
@@ -253,7 +261,7 @@ class ClassPartAnalyser
     {
         self::next();
         self::skip();
-
+        self::$isValueAConstant = null;
         if (!self::isA(TokenNameInterface::EQUAL_TOKEN)) {
             return null;
         }
@@ -274,9 +282,30 @@ class ClassPartAnalyser
                 break;
             }
 
+            if (self::isA(TokenNameInterface::STRING_TOKEN)) {
+                self::$isValueAConstant = true;
+                while (self::$iterator < self::$tokenLength
+                    && !(
+                        self::isA(TokenNameInterface::SKIPPED_TOKENS)
+                        || self::isA([
+                            TokenNameInterface::SEMI_COLON_TOKEN,
+                            TokenNameInterface::CLOSE_PARENTHESIS_TOKEN,
+                        ])
+                    )
+                ) {
+                    self::buffering();
+                    self::next();
+                    self::skip();
+                }
+
+                break;
+            }
             if (self::isA(TokenNameInterface::VALUE_TOKENS)) {
+                self::$isValueAConstant = false;
                 self::buffering();
             } elseif (self::isA(TokenNameInterface::OPEN_ARRAY_TOKENS)) {
+                self::$isValueAConstant = false;
+
                 return self::handleStaticArray();
             }
 

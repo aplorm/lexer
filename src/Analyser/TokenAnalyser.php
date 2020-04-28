@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Analyser;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
-use Aplorm\Common\Lexer\LexedPartInterface;
 
 /**
  * Analyse token extract from php file with token_get_all method.

@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Analyser\TokenAnalyser;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\TokenAnalyser;
-use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 use Aplorm\Lexer\Tests\Sample\NamespaceClassTest;
 

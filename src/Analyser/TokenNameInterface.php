@@ -36,6 +36,7 @@ interface TokenNameInterface
     public const IMPLEMENTS_TOKEN = T_IMPLEMENTS;
 
     public const DOUBLE_ARROW_TOKEN = T_DOUBLE_ARROW;
+    public const DOUBLE_COLON_TOKEN = T_DOUBLE_COLON;
     public const SEMI_COLON_TOKEN = ';';
     public const COLON_TOKEN = ':';
     public const OPEN_CURLY_BRACE_TOKEN = '{';
@@ -66,7 +67,6 @@ interface TokenNameInterface
         self::ENCAPSED_AND_WHITESPACE_TOKEN,
         self::LNUMBER_TOKEN,
         self::DNUMBER_TOKEN,
-        self::STRING_TOKEN,
     ];
 
     public const OPEN_ARRAY_TOKENS = [
@@ -77,6 +77,11 @@ interface TokenNameInterface
     public const CLOSE_ARRAY_TOKENS = [
         self::CLOSE_PARENTHESIS_TOKEN,
         self::CLOSE_BRACKET_TOKEN,
+    ];
+
+    public const SKIPPED_TOKENS = [
+        self::WHITESPACE_TOKEN,
+        self::EMPTY_TOKEN,
     ];
 
     public const CUSTOM_TOKENS = [

@@ -25,6 +25,8 @@ class Lexer
      * analyse class.
      *
      * @param string $filePath the file to analyse
+     *
+     * @return array<mixed>
      */
     public static function &analyse(string $filePath): array
     {

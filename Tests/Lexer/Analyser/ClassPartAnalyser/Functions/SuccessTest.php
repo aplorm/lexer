@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Functions;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
-use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest
@@ -241,6 +241,47 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
         self::assertEquals('bla', $partData['parameters']['$str']['value']);
+    }
+
+    public function testParameterIsNotConstantDefaultValue(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo(string $str = 'bla') {}
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+        self::assertEquals(1, \count($partData['parameters']));
+        self::assertEquals('bla', $partData['parameters']['$str']['value']);
+        self::assertFalse($partData['parameters']['$str']['isValueAConstant']);
+    }
+
+    public function testParameterIsConstantDefaultValue(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo(string $str = CONSTANT) {}
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+        self::assertEquals(1, \count($partData['parameters']));
+        self::assertTrue($partData['parameters']['$str']['isValueAConstant']);
     }
 
     public function testParameterDefaultValueHeredoc(): void
