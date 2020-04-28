@@ -240,7 +240,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('bla', $partData['parameters']['$str']['defaultValue']);
+        self::assertEquals('bla', $partData['parameters']['$str']['value']);
     }
 
     public function testParameterDefaultValueHeredoc(): void
@@ -262,7 +262,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('bla bla', $partData['parameters']['$str']['defaultValue']);
+        self::assertEquals('bla bla', $partData['parameters']['$str']['value']);
     }
 
     public function testParameterDefaultValueArray(): void
@@ -287,9 +287,9 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
 
-        self::assertArrayHasKey('A', $partData['parameters']['$str']['defaultValue'][0]);
-        self::assertContains('A', $partData['parameters']['$str']['defaultValue'][1]);
-        self::assertContains('A', $partData['parameters']['$str']['defaultValue']);
+        self::assertArrayHasKey('A', $partData['parameters']['$str']['value'][0]);
+        self::assertContains('A', $partData['parameters']['$str']['value'][1]);
+        self::assertContains('A', $partData['parameters']['$str']['value']);
     }
 
     public function testParameterDefaultValueOldArray(): void
@@ -314,8 +314,8 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
 
-        self::assertArrayHasKey('A', $partData['parameters']['$str']['defaultValue'][0]);
-        self::assertContains('A', $partData['parameters']['$str']['defaultValue'][1]);
-        self::assertContains('A', $partData['parameters']['$str']['defaultValue']);
+        self::assertArrayHasKey('A', $partData['parameters']['$str']['value'][0]);
+        self::assertContains('A', $partData['parameters']['$str']['value'][1]);
+        self::assertContains('A', $partData['parameters']['$str']['value']);
     }
 }

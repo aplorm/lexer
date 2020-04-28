@@ -105,7 +105,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals('bla bla', $partData['defaultValue']);
+        self::assertEquals('bla bla', $partData['value']);
     }
 
     public function testArrayValue(): void
@@ -129,10 +129,10 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(3, \count($partData['defaultValue']));
-        self::assertArrayHasKey('A', $partData['defaultValue'][0]);
-        self::assertContains('A', $partData['defaultValue'][1]);
-        self::assertContains('A', $partData['defaultValue']);
+        self::assertEquals(3, \count($partData['value']));
+        self::assertArrayHasKey('A', $partData['value'][0]);
+        self::assertContains('A', $partData['value'][1]);
+        self::assertContains('A', $partData['value']);
     }
 
     public function testOldArraySyntaxValue(): void
@@ -156,10 +156,10 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(3, \count($partData['defaultValue']));
-        self::assertArrayHasKey('A', $partData['defaultValue'][0]);
-        self::assertContains('A', $partData['defaultValue'][1]);
-        self::assertContains('A', $partData['defaultValue']);
+        self::assertEquals(3, \count($partData['value']));
+        self::assertArrayHasKey('A', $partData['value'][0]);
+        self::assertContains('A', $partData['value'][1]);
+        self::assertContains('A', $partData['value']);
     }
 
     public function testHeredoc(): void
@@ -181,6 +181,6 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals('bla bla bla', $partData['defaultValue']);
+        self::assertEquals('bla bla bla', $partData['value']);
     }
 }

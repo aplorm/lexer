@@ -190,7 +190,7 @@ class ClassPartAnalyser
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
-        $varData['defaultValue'] = self::handleVariableDefaultValue($variableName);
+        $varData['value'] = self::handleVariableDefaultValue($variableName);
 
         return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
     }

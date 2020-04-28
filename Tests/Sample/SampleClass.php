@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Sample;
 
-use Aplorm\Lexer\Exception\ClassNotFoundException;
+use Aplorm\Lexer\Exception\FileNotFoundException;
 
 /**
  * class comment.
@@ -68,7 +68,7 @@ EOT;
 FOOBAR;
 
     // bloc simple comment
-    private ?ClassNotFoundException $class;
+    private ?FileNotFoundException $class;
 
     private array $array = [
         ['A' => 'B'],
