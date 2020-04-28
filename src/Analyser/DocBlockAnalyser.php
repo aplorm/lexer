@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Analyser;
 
-use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 use Aplorm\Common\Interpreter\TypeInterface;
+use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
 /**
  * Analyse a docBlock to extract Annotation data.
@@ -239,6 +239,11 @@ class DocBlockAnalyser
         return $params;
     }
 
+    /**
+     * Handle type for annotation like @var, @param or @return.
+     *
+     * @return array<mixed>
+     */
     protected static function handleTypeAnnotations(): array
     {
         $types = [

@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Variable;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
-use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest
@@ -48,7 +48,7 @@ class SuccessTest extends AbstractTest
         $code = <<< 'EOT'
         <?php
 
-        private string $str;
+        private string $str = A_CONSTANT;
         EOT;
         $tokens = token_get_all($code);
         $iterator = 1;
@@ -63,6 +63,30 @@ class SuccessTest extends AbstractTest
         self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
         self::assertEquals('$str', $partName);
         self::assertEquals('private', $partData['visibility']);
+        self::assertTrue($partData['isValueAConstant']);
+    }
+
+    public function testIntegerDefaultValue(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        private string $str = 1;
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
+        self::assertEquals('$str', $partName);
+        self::assertEquals('private', $partData['visibility']);
+        self::assertFalse($partData['isValueAConstant']);
     }
 
     public function testNullableVariable(): void
@@ -86,6 +110,7 @@ class SuccessTest extends AbstractTest
         self::assertEquals('$str', $partName);
         self::assertEquals('private', $partData['visibility']);
         self::assertTrue($partData['nullable']);
+        self::assertArrayNotHasKey('isValueAConstant', $partData);
     }
 
     public function testDefaultValue(): void
@@ -106,6 +131,7 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
 
         self::assertEquals('bla bla', $partData['value']);
+        self::assertFalse($partData['isValueAConstant']);
     }
 
     public function testArrayValue(): void
