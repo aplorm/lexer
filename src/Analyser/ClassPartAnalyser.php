@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
+use Aplorm\Common\Lexer\LexedPartInterface;
 
 /**
  * Analyse variable and function part of a class.
@@ -191,7 +192,7 @@ class ClassPartAnalyser
         self::$type = null;
         $varData['defaultValue'] = self::handleVariableDefaultValue($variableName);
 
-        return ['partType' => TokenAnalyser::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
+        return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
     }
 
     /**
@@ -238,7 +239,7 @@ class ClassPartAnalyser
         }
         self::next();
 
-        return ['partType' => TokenAnalyser::FUNCTION_PART, 'partName' => $functionName, 'partData' => $funcData];
+        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => $functionName, 'partData' => $funcData];
     }
 
     /**
@@ -389,11 +390,11 @@ class ClassPartAnalyser
         $nbOpenCurlyBrace = 1;
 
         while ($nbOpenCurlyBrace > 0 && self::$iterator < self::$tokenLength) {
-
             self::next();
             self::skip();
             if (self::isA(TokenNameInterface::OPEN_CURLY_BRACE_TOKEN)) {
                 ++$nbOpenCurlyBrace;
+
                 continue;
             }
 
@@ -402,6 +403,7 @@ class ClassPartAnalyser
                 if (0 === $nbOpenCurlyBrace) {
                     break;
                 }
+
                 continue;
             }
         }

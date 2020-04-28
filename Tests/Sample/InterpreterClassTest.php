@@ -13,32 +13,44 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Tests\Sample;
 
 use Aplorm\Lexer\Exception\ClassNotFoundException;
+use Aplorm\Lexer\Tests\Sample\SampleClass;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation11;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation2;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation3;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation4;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation5;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation6;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation7;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation8;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation9;
+use Aplorm\Lexer\Tests\Sample\TestAnnotations\Annotation;
 
 /**
  * class comment.
  *
- * @annotation
- * @annotation2({
+ * @Annotation
+ * @Annotation2({
  *     "key.1": 1,
  *     "key.2": "string",
- *     "key.3": SampleClass::constant,
- *     "key.4": @annotation3(@annotation11({1, 2, 3, 4})),
+ *     "key.3": SampleClass::A_CONSTANT,
+ *     "key.4": @Annotation3(@Annotation11({1, 2, 3, 4})),
  *     "key.5": true
  * })
- * @annotation4("param")
- * @annotation5(1)
- * @annotation6(true)
- * @annotation7(SampleClass::constant)
- * @annotation8(1, 2, 3, 4)
+ * @Annotation4("param")
+ * @Annotation5(1)
+ * @Annotation6(true)
+ * @Annotation7(self::A_CONSTANT)
+ * @Annotation7(SampleClass::A_CONSTANT)
+ * @Annotation8(1, 2, 3, 4)
  */
-class SampleClass extends DummyClass implements DummyInterface, FooInterface
+class InterpreterClassTest extends DummyClass implements DummyInterface, FooInterface
 {
-    public const A_CONSTANT = 'A_CONSTANT VALUE';
+    public const A_CONSTANT = 'self constant';
 
     public static $astatic = 1;
 
     /**
-     * @annotation6
+     * @Annotation6
      */
     private float $float = 1.5;
     private int $int = 1;
@@ -88,9 +100,9 @@ FOOBAR;
      * @param string $param1 [description]
      * @param array  $param2 [description]
      *
-     * @return [type] [description]
+     * @return int|string
      *
-     * @annotationValid
+     * @Annotation9(name="bla")
      */
     public function mafunction(string $param1, array $param2): bool
     {

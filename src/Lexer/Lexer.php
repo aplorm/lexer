@@ -26,14 +26,16 @@ class Lexer
      *
      * @param string $filePath the file to analyse
      */
-    public static function analyse(string $filePath): void
+    public static function &analyse(string $filePath): array
     {
         self::fileExist($filePath);
         self::getFileContent($filePath);
 
         $tokens = token_get_all(self::$classContent);
 
-        $part = TokenAnalyser::analyse($tokens);
+        $parts = &TokenAnalyser::analyse($tokens);
+
+        return $parts;
     }
 
     /**

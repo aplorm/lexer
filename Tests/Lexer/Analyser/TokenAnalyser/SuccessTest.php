@@ -14,6 +14,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\TokenAnalyser;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\TokenAnalyser;
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 use Aplorm\Lexer\Tests\Sample\NamespaceClassTest;
 
@@ -47,7 +48,7 @@ class SuccessTest extends AbstractTest
     {
         $tokens = $this->tokeniseClass(NamespaceClassTest::class);
         $parts = TokenAnalyser::analyse($tokens);
-        self::assertEquals($this->provideClassNamespace(NamespaceClassTest::class), $parts[TokenAnalyser::NAMESPACE_PART]);
+        self::assertEquals($this->provideClassNamespace(NamespaceClassTest::class), $parts[LexedPartInterface::NAMESPACE_PART]);
     }
 
     /**
@@ -61,8 +62,8 @@ class SuccessTest extends AbstractTest
     {
         $parts = TokenAnalyser::analyse($tokens);
 
-        self::assertEquals($useNumber, \count($parts[TokenAnalyser::USE_PART]));
-        self::assertTrue($parts[TokenAnalyser::USE_PART][$firstUse]);
+        self::assertEquals($useNumber, \count($parts[LexedPartInterface::USE_PART]));
+        self::assertTrue($parts[LexedPartInterface::USE_PART][$firstUse]);
     }
 
     /**
@@ -76,8 +77,8 @@ class SuccessTest extends AbstractTest
     public function testUseAs(&$tokens, $firstAlias, $aliasValue, $aliasNumber): void
     {
         $parts = TokenAnalyser::analyse($tokens);
-        self::assertEquals($aliasNumber, \count($parts[TokenAnalyser::CLASS_ALIASES]));
-        self::assertArrayHasKey($firstAlias, $parts[TokenAnalyser::CLASS_ALIASES]);
-        self::assertEquals($aliasValue, $parts[TokenAnalyser::CLASS_ALIASES][$firstAlias]);
+        self::assertEquals($aliasNumber, \count($parts[LexedPartInterface::CLASS_ALIASES_PART]));
+        self::assertArrayHasKey($firstAlias, $parts[LexedPartInterface::CLASS_ALIASES_PART]);
+        self::assertEquals($aliasValue, $parts[LexedPartInterface::CLASS_ALIASES_PART][$firstAlias]);
     }
 }

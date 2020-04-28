@@ -14,7 +14,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Variable;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
-use Aplorm\Lexer\Analyser\TokenAnalyser;
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest
@@ -60,7 +60,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::VARIABLE_PART, $partType);
+        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
         self::assertEquals('$str', $partName);
         self::assertEquals('private', $partData['visibility']);
     }
@@ -82,7 +82,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(TokenAnalyser::VARIABLE_PART, $partType);
+        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
         self::assertEquals('$str', $partName);
         self::assertEquals('private', $partData['visibility']);
         self::assertTrue($partData['nullable']);

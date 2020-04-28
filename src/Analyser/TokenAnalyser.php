@@ -14,6 +14,7 @@ namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
+use Aplorm\Common\Lexer\LexedPartInterface;
 
 /**
  * Analyse token extract from php file with token_get_all method.
@@ -84,25 +85,18 @@ class TokenAnalyser
      */
     private static int $tokenLength = 0;
 
-    public const NAMESPACE_PART = 'namespace';
-    public const CLASS_NAME_PART = 'classname';
-    public const CLASS_ALIASES = 'classalias';
-    public const VARIABLE_PART = 'variables';
-    public const FUNCTION_PART = 'functions';
-    public const USE_PART = 'use';
-
     /**
      * parts find during analyzed.
      *
      * @var array<string, mixed>
      */
     private static array $parts = [
-        self::NAMESPACE_PART => null,
-        self::CLASS_NAME_PART => null,
-        self::CLASS_ALIASES => [],
-        self::USE_PART => [],
-        self::VARIABLE_PART => [],
-        self::FUNCTION_PART => [],
+        LexedPartInterface::NAMESPACE_PART => null,
+        LexedPartInterface::CLASS_NAME_PART => null,
+        LexedPartInterface::CLASS_ALIASES_PART => [],
+        LexedPartInterface::USE_PART => [],
+        LexedPartInterface::VARIABLE_PART => [],
+        LexedPartInterface::FUNCTION_PART => [],
     ];
 
     /**
@@ -148,7 +142,7 @@ class TokenAnalyser
         self::buffering();
         $className = self::flush();
         /** @var string */
-        $namespace = self::getSpecificPart(self::NAMESPACE_PART);
+        $namespace = self::getSpecificPart(LexedPartInterface::NAMESPACE_PART);
         $fullyClassName = sprintf('%s\\%s', $namespace, $className);
 
         $classData = [
@@ -160,7 +154,7 @@ class TokenAnalyser
 
         self::$lastAnnotations = null;
 
-        self::addDataToPart(self::CLASS_NAME_PART, $className, $classData);
+        self::addDataToPart(LexedPartInterface::CLASS_NAME_PART, null, $classData);
     }
 
     /**
@@ -255,10 +249,10 @@ class TokenAnalyser
         }
 
         if ($classNamespace) {
-            self::addDataToPart(self::NAMESPACE_PART, null, $fullNamespace);
+            self::addDataToPart(LexedPartInterface::NAMESPACE_PART, null, $fullNamespace);
         } else {
-            self::addDataToPart(self::USE_PART, $fullNamespace);
-            self::addDataToPart(self::CLASS_ALIASES, $alias, $fullNamespace);
+            self::addDataToPart(LexedPartInterface::USE_PART, $fullNamespace);
+            self::addDataToPart(LexedPartInterface::CLASS_ALIASES_PART, $alias, $fullNamespace);
         }
     }
 
@@ -291,12 +285,12 @@ class TokenAnalyser
     {
         self::$buffer = [];
         self::$parts = [
-            self::NAMESPACE_PART => null,
-            self::CLASS_NAME_PART => null,
-            self::CLASS_ALIASES => [],
-            self::USE_PART => [],
-            self::VARIABLE_PART => [],
-            self::FUNCTION_PART => [],
+            LexedPartInterface::NAMESPACE_PART => null,
+            LexedPartInterface::CLASS_NAME_PART => null,
+            LexedPartInterface::CLASS_ALIASES_PART => [],
+            LexedPartInterface::USE_PART => [],
+            LexedPartInterface::VARIABLE_PART => [],
+            LexedPartInterface::FUNCTION_PART => [],
         ];
         self::$previousToken = null;
         self::$previousVisibility = null;
