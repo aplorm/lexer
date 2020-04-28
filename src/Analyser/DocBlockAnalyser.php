@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
-use Aplorm\Lexer\TypeInterface;
+use Aplorm\Common\Interpreter\TypeInterface;
 
 /**
  * Analyse a docBlock to extract Annotation data.

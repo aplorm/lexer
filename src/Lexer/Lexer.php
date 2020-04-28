@@ -15,7 +15,6 @@ namespace Aplorm\Lexer\Lexer;
 use Aplorm\Lexer\Analyser\TokenAnalyser;
 use Aplorm\Lexer\Exception\FileCorruptedException;
 use Aplorm\Lexer\Exception\FileNotFoundException;
-use Aplorm\Lexer\Interpreter\Interpreter;
 use function token_get_all;
 
 class Lexer
@@ -27,7 +26,7 @@ class Lexer
      *
      * @param string $filePath the file to analyse
      */
-    public static function analyse(string $filePath): void
+    public static function &analyse(string $filePath): array
     {
         self::fileExist($filePath);
         self::getFileContent($filePath);
@@ -35,7 +34,8 @@ class Lexer
         $tokens = token_get_all(self::$classContent);
 
         $parts = &TokenAnalyser::analyse($tokens);
-        Interpreter::interprete($parts);
+
+        return $parts;
     }
 
     /**

@@ -14,7 +14,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Functions;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
-use Aplorm\Lexer\LexedPartInterface;
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest

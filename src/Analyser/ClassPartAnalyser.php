@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
-use Aplorm\Lexer\LexedPartInterface;
+use Aplorm\Common\Lexer\LexedPartInterface;
 
 /**
  * Analyse variable and function part of a class.

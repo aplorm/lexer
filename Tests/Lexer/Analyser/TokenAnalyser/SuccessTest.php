@@ -14,7 +14,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\TokenAnalyser;
 
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\TokenAnalyser;
-use Aplorm\Lexer\LexedPartInterface;
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 use Aplorm\Lexer\Tests\Sample\NamespaceClassTest;
 

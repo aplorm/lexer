@@ -14,7 +14,7 @@ namespace Aplorm\Lexer\Analyser;
 
 use Aplorm\Lexer\Analyser\Traits\CommonAnalyserTraits;
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
-use Aplorm\Lexer\LexedPartInterface;
+use Aplorm\Common\Lexer\LexedPartInterface;
 
 /**
  * Analyse token extract from php file with token_get_all method.

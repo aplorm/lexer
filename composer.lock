@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aplorm/common.git",
-                "reference": "7a6dd8276064eb1fecd665d233dd3e6a7d73e811"
+                "reference": "f2e6628bc1d6ae3b19874d8dc1898607931fa27f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aplorm/common/zipball/7a6dd8276064eb1fecd665d233dd3e6a7d73e811",
-                "reference": "7a6dd8276064eb1fecd665d233dd3e6a7d73e811",
+                "url": "https://api.github.com/repos/aplorm/common/zipball/f2e6628bc1d6ae3b19874d8dc1898607931fa27f",
+                "reference": "f2e6628bc1d6ae3b19874d8dc1898607931fa27f",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 "source": "https://github.com/aplorm/common/tree/master",
                 "issues": "https://github.com/aplorm/common/issues"
             },
-            "time": "2020-04-27T16:50:41+00:00"
+            "time": "2020-04-28T11:43:20+00:00"
         }
     ],
     "packages-dev": [
