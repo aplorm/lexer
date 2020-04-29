@@ -65,6 +65,8 @@ class Lexer
      * @throws FileCorruptedException if file_get_contents return false
      *
      * @return string the file content
+     *
+     * @codeCoverageIgnore
      */
     private static function getFileContent(string $filePath): string
     {

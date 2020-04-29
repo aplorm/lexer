@@ -109,6 +109,7 @@ class DocBlockAnalyser
         'uses',
         'used-by',
         'version',
+        'codeCoverageIgnore',
     ];
 
     protected const TYPE_ANNOTATIONS = [
