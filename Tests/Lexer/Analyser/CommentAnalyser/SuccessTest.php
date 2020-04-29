@@ -103,4 +103,14 @@ EOD;
         $annotations = DocBlockAnalyser::analyse($docBloc);
         self::assertEquals($value, $annotations[0]['params'][0]['value']);
     }
+
+    /**
+     * @dataProvider annotationNumberProvider
+     */
+    public function testNumberParameter(string $docBloc, string $value, int $type): void
+    {
+        $annotations = DocBlockAnalyser::analyse($docBloc);
+        self::assertEquals($value, $annotations[0]['params'][0]['value']);
+        self::assertEquals($type, $annotations[0]['params'][0]['type']);
+    }
 }
