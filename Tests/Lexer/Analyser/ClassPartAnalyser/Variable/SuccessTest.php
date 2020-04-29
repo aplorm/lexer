@@ -134,6 +134,27 @@ class SuccessTest extends AbstractTest
         self::assertFalse($partData['isValueAConstant']);
     }
 
+    public function testClassConstantValue(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        private string $str = self::A_CONSTANT;
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals('self::A_CONSTANT', $partData['value']);
+        self::assertTrue($partData['isValueAConstant']);
+    }
+
     public function testArrayValue(): void
     {
         $code = <<< 'EOT'

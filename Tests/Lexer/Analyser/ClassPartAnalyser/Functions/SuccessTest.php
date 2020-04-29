@@ -284,6 +284,30 @@ class SuccessTest extends AbstractTest
         self::assertTrue($partData['parameters']['$str']['isValueAConstant']);
     }
 
+    public function testParameterIsMultipleConstantDefaultValue(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo(string $str = CONSTANT, $param = true) {}
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(2, \count($partData['parameters']));
+        self::assertTrue($partData['parameters']['$str']['isValueAConstant']);
+        self::assertEquals('CONSTANT', $partData['parameters']['$str']['value']);
+        self::assertTrue($partData['parameters']['$param']['isValueAConstant']);
+        self::assertEquals('true', $partData['parameters']['$param']['value']);
+    }
+
     public function testParameterDefaultValueHeredoc(): void
     {
         $code = <<< 'EOT'
