@@ -37,6 +37,9 @@ class Lexer
 
         $parts = &TokenAnalyser::analyse($tokens);
 
+        unset($tokens);
+        self::$classContent = null;
+
         return $parts;
     }
 

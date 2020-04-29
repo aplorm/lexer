@@ -127,6 +127,8 @@ class TokenAnalyser
             self::next();
         }
 
+        self::reset();
+
         return self::$parts;
     }
 
@@ -303,6 +305,21 @@ class TokenAnalyser
         self::$tokens = &$tokens;
         self::readToken();
         ClassPartAnalyser::init(self::$tokens, self::$iterator, self::$tokenLength);
+    }
+
+    protected static function reset(): void
+    {
+        self::$buffer = [];
+        self::$previousToken = null;
+        self::$previousVisibility = null;
+        self::$nullable = false;
+        self::$type = null;
+        self::$lastAnnotations = null;
+        self::$token = self::$previousToken = null;
+        self::$tokenLength = 0;
+        self::$iterator = 0;
+        self::$tokens = [];
+        ClassPartAnalyser::clean();
     }
 
     /**

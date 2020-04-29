@@ -102,11 +102,22 @@ class ClassPartAnalyser
      *
      * @return array<mixed> function or attribute data
      */
-    public static function analyse(?array &$lastAnnotations = null): array
+    public static function &analyse(?array &$lastAnnotations = null): array
     {
         self::$lastAnnotations = &$lastAnnotations;
 
         return self::handleElement();
+    }
+
+    /**
+     * clean analyser of useless data.
+     */
+    public static function clean(): void
+    {
+        self::reset();
+        self::$tokens = [];
+        self::$iterator = 0;
+        self::$tokenLength = 0;
     }
 
     /**
@@ -200,7 +211,7 @@ class ClassPartAnalyser
             $varData['isValueAConstant'] = self::$isValueAConstant;
         }
 
-        return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
+        return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => &$variableName, 'partData' => &$varData];
     }
 
     /**
@@ -247,7 +258,7 @@ class ClassPartAnalyser
         }
         self::next();
 
-        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => $functionName, 'partData' => $funcData];
+        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => &$functionName, 'partData' => &$funcData];
     }
 
     /**
