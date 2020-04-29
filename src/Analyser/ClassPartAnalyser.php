@@ -110,6 +110,23 @@ class ClassPartAnalyser
     }
 
     /**
+     * clean analyser of useless data.
+     */
+    public static function clean(): void
+    {
+        self::$buffer = [];
+        self::$token = null;
+        self::$previousToken = null;
+        self::$previousVisibility = null;
+        self::$nullable = false;
+        self::$type = null;
+        self::$lastAnnotations = null;
+        self::$tokens = [];
+        self::$iterator = 0;
+        self::$tokenLength = 0;
+    }
+
+    /**
      * analyse elemet.
      *
      * @return array<string, string|array<mixed>|null>
@@ -200,7 +217,7 @@ class ClassPartAnalyser
             $varData['isValueAConstant'] = self::$isValueAConstant;
         }
 
-        return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => $variableName, 'partData' => $varData];
+        return ['partType' => LexedPartInterface::VARIABLE_PART, 'partName' => &$variableName, 'partData' => &$varData];
     }
 
     /**
@@ -247,7 +264,7 @@ class ClassPartAnalyser
         }
         self::next();
 
-        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => $functionName, 'partData' => $funcData];
+        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => &$functionName, 'partData' => &$funcData];
     }
 
     /**

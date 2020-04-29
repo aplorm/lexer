@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Analyser\Traits;
 
+use Aplorm\Common\Interpreter\TypeInterface;
+
 trait AnnotationProviderTrait
 {
     /**
@@ -180,6 +182,59 @@ trait AnnotationProviderTrait
                 <<<'EOD'
                 "string6
                 EOD,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<array<mixed>>
+     */
+    public function annotationNumberProvider()
+    {
+        return [
+            [
+                <<<'EOD'
+                /**
+                 * @annotation(1)
+                */
+                EOD,
+                <<<'EOD'
+                1
+                EOD,
+                TypeInterface::INT_CONSTANT_TYPE,
+            ],
+            [
+                <<<'EOD'
+                /**
+                 * @annotation(1_000_000)
+                */
+                EOD,
+                <<<'EOD'
+                1_000_000
+                EOD,
+                TypeInterface::INT_CONSTANT_TYPE,
+            ],
+            [
+                <<<'EOD'
+                /**
+                 * @annotation(1.6)
+                */
+                EOD,
+                <<<'EOD'
+                1.6
+                EOD,
+                TypeInterface::FLOAT_CONSTANT_TYPE,
+            ],
+            [
+                <<<'EOD'
+                /**
+                 * @annotation(1337e0)
+                */
+                EOD,
+                <<<'EOD'
+                1337e0
+                EOD,
+                TypeInterface::FLOAT_CONSTANT_TYPE,
             ],
         ];
     }

@@ -361,8 +361,11 @@ class DocBlockAnalyser
             return TypeInterface::CLASS_CONSTANT_TYPE;
         }
 
-        if (is_numeric($constant)) {
-            return TypeInterface::NUMBER_CONSTANT_TYPE;
+        if (is_numeric(str_replace('_', '', $constant)) && (false !== strstr($constant, '.') || false !== strstr($constant, 'e'))) {
+            return TypeInterface::FLOAT_CONSTANT_TYPE;
+        }
+        if (is_numeric(str_replace('_', '', $constant))) {
+            return TypeInterface::INT_CONSTANT_TYPE;
         }
 
         return TypeInterface::OTHER_CONSTANT_TYPE;
