@@ -289,6 +289,7 @@ class ClassPartAnalyser
                         self::isA(TokenNameInterface::SKIPPED_TOKENS)
                         || self::isA([
                             TokenNameInterface::SEMI_COLON_TOKEN,
+                            TokenNameInterface::COMMA_TOKEN,
                             TokenNameInterface::CLOSE_PARENTHESIS_TOKEN,
                         ])
                     )
