@@ -114,7 +114,13 @@ class ClassPartAnalyser
      */
     public static function clean(): void
     {
-        self::reset();
+        self::$buffer = [];
+        self::$token = null;
+        self::$previousToken = null;
+        self::$previousVisibility = null;
+        self::$nullable = false;
+        self::$type = null;
+        self::$lastAnnotations = null;
         self::$tokens = [];
         self::$iterator = 0;
         self::$tokenLength = 0;
