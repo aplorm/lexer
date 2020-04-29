@@ -102,7 +102,7 @@ class ClassPartAnalyser
      *
      * @return array<mixed> function or attribute data
      */
-    public static function &analyse(?array &$lastAnnotations = null): array
+    public static function analyse(?array &$lastAnnotations = null): array
     {
         self::$lastAnnotations = &$lastAnnotations;
 
