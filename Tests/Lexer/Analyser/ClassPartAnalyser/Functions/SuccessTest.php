@@ -15,6 +15,7 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Functions;
 use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
 
 class SuccessTest extends AbstractTest
@@ -201,6 +202,35 @@ class SuccessTest extends AbstractTest
         self::assertEquals(1, \count($partData['parameters']));
         self::assertEquals('string', $partData['parameters']['$str']['type']);
         self::assertFalse($partData['parameters']['$str']['nullable']);
+    }
+
+    public function testFunctionAnnotations(): void
+    {
+        $annotationContent = <<< 'EOT'
+        /**
+         * @param string|null $str
+         * @annotation
+         */
+        EOT;
+
+        $annotations = DocBlockAnalyser::analyse($annotationContent);
+
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo(string $str) {}
+        EOT;
+
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertArrayHasKey('annotations', $partData);
     }
 
     public function testParameterNullable(): void

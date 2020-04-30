@@ -464,7 +464,6 @@ class ClassPartAnalyser
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
-        self::$lastAnnotations = null;
         self::readToken();
         self::skip();
     }
