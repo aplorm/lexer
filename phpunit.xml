@@ -4,6 +4,10 @@
          colors="true"
          verbose="true">
 
+    <php>
+        <ini name="error_reporting" value="1" />
+        <env name="SAMPLE_CLASSES" value="Tests/Sample"/>
+    </php>
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>Tests</directory>

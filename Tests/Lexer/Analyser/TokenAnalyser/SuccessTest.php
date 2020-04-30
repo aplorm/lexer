@@ -61,9 +61,20 @@ class SuccessTest extends AbstractTest
     public function testUse(&$tokens, $firstUse, $useNumber): void
     {
         $parts = TokenAnalyser::analyse($tokens);
-
         self::assertEquals($useNumber, \count($parts[LexedPartInterface::USE_PART]));
         self::assertTrue($parts[LexedPartInterface::USE_PART][$firstUse]);
+    }
+
+    /**
+     * @dataProvider traitsProvider
+     *
+     * @param array<mixed> $tokens
+     * @param string       $firstTrait
+     */
+    public function testTraits(&$tokens, $firstTrait): void
+    {
+        $parts = TokenAnalyser::analyse($tokens);
+        self::assertEquals($firstTrait, $parts[LexedPartInterface::TRAITS_PART][0]);
     }
 
     /**

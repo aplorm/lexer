@@ -14,4 +14,5 @@ namespace Aplorm\Lexer\Tests\Sample;
 
 class DummyClass
 {
+    use TestTraits;
 }

@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Lexer;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Lexer\Lexer;
-use Aplorm\Lexer\Tests\Sample\SampleClass;
-use ReflectionClass;
+use Generator;
 
 class SuccessTest extends AbstractTest
 {
@@ -41,13 +41,38 @@ class SuccessTest extends AbstractTest
     {
     }
 
-    public function testLexer(): void
+    /**
+     * @dataProvider useAsProvider
+     *
+     * @param string $fileName
+     * @param bool   $isTrait
+     */
+    public function testLexer($fileName, $isTrait): void
     {
-        $reflectionClass = new ReflectionClass(SampleClass::class);
-        /** @var string */
-        $fileName = $reflectionClass->getFileName();
-
-        Lexer::analyse($fileName);
+        $parts = Lexer::analyse($fileName);
         self::assertTrue(true);
+        self::assertEquals($isTrait, $parts[LexedPartInterface::CLASS_NAME_PART]['isTrait']);
+    }
+
+    /**
+     * @return Generator<array<mixed>>
+     */
+    public function useAsProvider(): Generator
+    {
+        if (isset($_SERVER['TRAVIS_BUILD_DIR'])) {
+            $dir = $_SERVER['TRAVIS_BUILD_DIR'].'/'.$_ENV['SAMPLE_CLASSES'];
+        } else {
+            $dir = $_ENV['PWD'].'/'.$_ENV['SAMPLE_CLASSES'];
+        }
+
+        yield [
+            $dir.'/SampleClass.php',
+            false,
+        ];
+
+        yield [
+            $dir.'/TestTraits.php',
+            true,
+        ];
     }
 }
