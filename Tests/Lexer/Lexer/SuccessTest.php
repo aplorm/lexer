@@ -59,6 +59,7 @@ class SuccessTest extends AbstractTest
      */
     public function useAsProvider(): Generator
     {
+        var_dump($_ENV, $GLOBALS);
         if (isset($_ENV['TRAVIS_BUILD_DIR'])) {
             $dir = $_ENV['TRAVIS_BUILD_DIR'].'/'.$_ENV['SAMPLE_CLASSES'];
         } else {
