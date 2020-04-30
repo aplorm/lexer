@@ -81,4 +81,19 @@ class SuccessTest extends AbstractTest
         self::assertArrayHasKey($firstAlias, $parts[LexedPartInterface::CLASS_ALIASES_PART]);
         self::assertEquals($aliasValue, $parts[LexedPartInterface::CLASS_ALIASES_PART][$firstAlias]);
     }
+
+    /**
+     * @dataProvider classExtendProvider
+     *
+     * @param array<mixed> $tokens
+     * @param string       $firstAlias
+     * @param string       $aliasValue
+     * @param int          $aliasNumber
+     */
+    public function testExtends(&$tokens, $extendValue): void
+    {
+        $parts = TokenAnalyser::analyse($tokens);
+
+        self::assertEquals($extendValue, $parts[LexedPartInterface::CLASS_NAME_PART]['parent']);
+    }
 }

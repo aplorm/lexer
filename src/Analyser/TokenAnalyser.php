@@ -143,6 +143,17 @@ class TokenAnalyser
 
         self::buffering();
         $className = self::flush();
+
+        $extends = null;
+        self::next();
+        self::skip();
+        if (self::isA(TokenNameInterface::EXTENDS_TOKEN)) {
+            self::next();
+            self::skip();
+
+            $extends = self::tokenValue();
+        }
+
         /** @var string */
         $namespace = self::getSpecificPart(LexedPartInterface::NAMESPACE_PART);
         $fullyClassName = sprintf('%s\\%s', $namespace, $className);
@@ -152,6 +163,7 @@ class TokenAnalyser
             'namespace' => $namespace,
             'fullyQualifiedClassName' => $fullyClassName,
             'annotations' => self::$lastAnnotations,
+            'parent' => $extends,
         ];
 
         self::$lastAnnotations = null;
