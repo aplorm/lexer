@@ -17,7 +17,7 @@ use Aplorm\Lexer\Tests\Sample\SubNamespace\ {
     FooClass as FC
 };
 
-class GroupUseClassTest
+class GroupUseClassTest extends DummyClass
 {
     private DummyClass $dc;
     private FC $dc2;

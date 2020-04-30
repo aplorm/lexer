@@ -61,4 +61,21 @@ trait FileDataProviderTrait
             ],
         ];
     }
+
+    /**
+     * @return array<array<mixed>>
+     */
+    public function classExtendProvider(): array
+    {
+        return [
+            [
+                $this->tokeniseClass(UseAsClassTest::class),
+                NULL,
+            ],
+            [
+                $this->tokeniseClass(GroupUseClassTest::class),
+                'DummyClass',
+            ],
+        ];
+    }
 }
