@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Analyser;
 
+use Aplorm\Common\Annotations\NativeAnnotations;
 use Aplorm\Common\Interpreter\TypeInterface;
 use Aplorm\Lexer\Exception\AnnotationSyntaxException;
 
@@ -77,47 +78,6 @@ class DocBlockAnalyser
         DocBlockTokenInterface::EMPTY_TOKEN,
     ];
 
-    protected const EXCLUED_ANNOTATIONS = [
-        'example',
-        'internal',
-        'inheritdoc',
-        'link',
-        'see',
-        'api',
-        'author',
-        'category',
-        'copyright',
-        'deprecated',
-        'example',
-        'filesource',
-        'global',
-        'ignore',
-        'internal',
-        'license',
-        'link',
-        'method',
-        'package',
-        'property',
-        'property-read',
-        'property-write',
-        'see',
-        'since',
-        'source',
-        'subpackage',
-        'throws',
-        'todo',
-        'uses',
-        'used-by',
-        'version',
-        'codeCoverageIgnore',
-    ];
-
-    protected const TYPE_ANNOTATIONS = [
-        'var',
-        'param',
-        'return',
-    ];
-
     /**
      * @param string $blocComment The docBloc who may contains annotation
      *
@@ -175,11 +135,11 @@ class DocBlockAnalyser
         }
         $name = self::flush();
 
-        if (\in_array($name, self::EXCLUED_ANNOTATIONS, true)) {
+        if (\in_array($name, NativeAnnotations::EXCLUED_ANNOTATIONS, true)) {
             return null;
         }
         $annotation['name'] = $name;
-        if (\in_array($name, self::TYPE_ANNOTATIONS, true)) {
+        if (\in_array($name, NativeAnnotations::TYPE_ANNOTATIONS, true)) {
             $annotation['types'] = self::handleTypeAnnotations();
         } elseif (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
             $annotation['params'] = self::handleAnnotationParams($annotation['name']);
