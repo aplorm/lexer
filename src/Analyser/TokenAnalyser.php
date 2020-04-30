@@ -85,6 +85,8 @@ class TokenAnalyser
      */
     private static int $tokenLength = 0;
 
+    private static bool $inClass = false;
+
     /**
      * parts find during analyzed.
      *
@@ -97,6 +99,7 @@ class TokenAnalyser
         LexedPartInterface::USE_PART => [],
         LexedPartInterface::VARIABLE_PART => [],
         LexedPartInterface::FUNCTION_PART => [],
+        LexedPartInterface::TRAITS_PART => [],
     ];
 
     /**
@@ -116,7 +119,10 @@ class TokenAnalyser
                 self::handleNamespace(true);
             } elseif (self::isA(TokenNameInterface::USE_TOKEN)) {
                 self::handleNamespace();
-            } elseif (self::isA(TokenNameInterface::CLASS_TOKEN)) {
+            } elseif (self::isA([
+                TokenNameInterface::CLASS_TOKEN,
+                TokenNameInterface::TRAIT_TOKEN,
+            ])) {
                 self::handleClassName();
             } elseif (self::isA(TokenNameInterface::DOC_COMMENT_TOKEN)) {
                 self::handleDocComment();
@@ -137,6 +143,10 @@ class TokenAnalyser
      */
     protected static function handleClassName(): void
     {
+        $isTrait = false;
+        if (self::isA(TokenNameInterface::TRAIT_TOKEN)) {
+            $isTrait = true;
+        }
         while (self::$iterator < self::$tokenLength && !self::isA(TokenNameInterface::STRING_TOKEN)) {
             self::next();
         }
@@ -164,10 +174,11 @@ class TokenAnalyser
             'fullyQualifiedClassName' => $fullyClassName,
             'annotations' => self::$lastAnnotations,
             'parent' => $extends,
+            'isTrait' => $isTrait,
         ];
 
         self::$lastAnnotations = null;
-
+        self::$inClass = true;
         self::addDataToPart(LexedPartInterface::CLASS_NAME_PART, null, $classData);
     }
 
@@ -221,7 +232,14 @@ class TokenAnalyser
 
             self::next();
         }
-        self::addNamespaceToPart($fullNamespace, $namespaceBase, $classNamespace);
+        if (!self::$inClass) {
+            self::addNamespaceToPart($fullNamespace, $namespaceBase, $classNamespace);
+
+            return;
+        }
+        $traitsName = self::flush();
+
+        self::addDataToPart(LexedPartInterface::TRAITS_PART, null, $traitsName);
     }
 
     protected static function handleElement(): void
@@ -280,6 +298,12 @@ class TokenAnalyser
     protected static function addDataToPart(string $part, ?string $key, &$value = true): void
     {
         if (null === $key) {
+            if (\is_array(self::$parts[$part])) {
+                self::$parts[$part][] = $value;
+
+                return;
+            }
+
             self::$parts[$part] = $value;
 
             return;
@@ -305,6 +329,7 @@ class TokenAnalyser
             LexedPartInterface::USE_PART => [],
             LexedPartInterface::VARIABLE_PART => [],
             LexedPartInterface::FUNCTION_PART => [],
+            LexedPartInterface::TRAITS_PART => [],
         ];
         self::$previousToken = null;
         self::$previousVisibility = null;
@@ -315,6 +340,7 @@ class TokenAnalyser
         self::$tokenLength = \count($tokens);
         self::$iterator = 0;
         self::$tokens = &$tokens;
+        self::$inClass = false;
         self::readToken();
         ClassPartAnalyser::init(self::$tokens, self::$iterator, self::$tokenLength);
     }
@@ -330,6 +356,7 @@ class TokenAnalyser
         self::$token = self::$previousToken = null;
         self::$tokenLength = 0;
         self::$iterator = 0;
+        self::$inClass = false;
         self::$tokens = [];
         ClassPartAnalyser::clean();
     }

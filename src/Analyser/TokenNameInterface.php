@@ -32,6 +32,7 @@ interface TokenNameInterface
     public const CONSTANT_TOKEN = T_CONST;
 
     public const CLASS_TOKEN = T_CLASS;
+    public const TRAIT_TOKEN = T_TRAIT;
     public const EXTENDS_TOKEN = T_EXTENDS;
     public const IMPLEMENTS_TOKEN = T_IMPLEMENTS;
 

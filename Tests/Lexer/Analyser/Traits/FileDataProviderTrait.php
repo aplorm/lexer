@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Tests\Lexer\Analyser\Traits;
 
+use Aplorm\Lexer\Tests\Sample\DummyClass as TraitDummyClass;
 use Aplorm\Lexer\Tests\Sample\GroupUseClassTest;
 use Aplorm\Lexer\Tests\Sample\NamespaceClassTest;
 use Aplorm\Lexer\Tests\Sample\SubNamespace\DummyClass;
@@ -37,6 +38,19 @@ trait FileDataProviderTrait
                 $this->tokeniseClass(GroupUseClassTest::class),
                 DummyClass::class,
                 2,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<array<mixed>>
+     */
+    public function traitsProvider(): array
+    {
+        return [
+            [
+                $this->tokeniseClass(TraitDummyClass::class),
+                'TestTraits',
             ],
         ];
     }
