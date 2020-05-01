@@ -70,11 +70,14 @@ class SuccessTest extends AbstractTest
      *
      * @param array<mixed> $tokens
      * @param string       $firstTrait
+     * @param string       $fullyQualifiedTraitClass
      */
-    public function testTraits(&$tokens, $firstTrait): void
+    public function testTraits(&$tokens, $firstTrait, $fullyQualifiedTraitClass): void
     {
         $parts = TokenAnalyser::analyse($tokens);
-        self::assertEquals($firstTrait, $parts[LexedPartInterface::TRAITS_PART][0]);
+
+        self::assertArrayHasKey($firstTrait, $parts[LexedPartInterface::TRAITS_PART]);
+        self::assertEquals($fullyQualifiedTraitClass, $parts[LexedPartInterface::TRAITS_PART][$firstTrait]);
     }
 
     /**

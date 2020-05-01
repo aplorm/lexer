@@ -98,7 +98,7 @@ class TokenAnalyser
         LexedPartInterface::CLASS_ALIASES_PART => [],
         LexedPartInterface::USE_PART => [],
         LexedPartInterface::VARIABLE_PART => [],
-        LexedPartInterface::FUNCTION_PART => [],
+        LexedPartInterface::METHOD_PART => [],
         LexedPartInterface::TRAITS_PART => [],
     ];
 
@@ -238,8 +238,14 @@ class TokenAnalyser
             return;
         }
         $traitsName = self::flush();
-
-        self::addDataToPart(LexedPartInterface::TRAITS_PART, null, $traitsName);
+        if (isset(self::$parts[LexedPartInterface::CLASS_ALIASES_PART][$traitsName])) {
+            self::addDataToPart(LexedPartInterface::TRAITS_PART, $traitsName, self::$parts[LexedPartInterface::CLASS_ALIASES_PART][$traitsName]);
+        } else {
+            /** @var string */
+            $namespace = self::getSpecificPart(LexedPartInterface::NAMESPACE_PART);
+            $fullyClassName = sprintf('%s\\%s', $namespace, $traitsName);
+            self::addDataToPart(LexedPartInterface::TRAITS_PART, $traitsName, $fullyClassName);
+        }
     }
 
     protected static function handleElement(): void
@@ -328,7 +334,7 @@ class TokenAnalyser
             LexedPartInterface::CLASS_ALIASES_PART => [],
             LexedPartInterface::USE_PART => [],
             LexedPartInterface::VARIABLE_PART => [],
-            LexedPartInterface::FUNCTION_PART => [],
+            LexedPartInterface::METHOD_PART => [],
             LexedPartInterface::TRAITS_PART => [],
         ];
         self::$previousToken = null;

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Aplorm\Lexer\Lexer;
 
+use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Lexer\Analyser\TokenAnalyser;
 use Aplorm\Lexer\Exception\FileCorruptedException;
 use Aplorm\Lexer\Exception\FileNotFoundException;
@@ -39,6 +40,7 @@ class Lexer
 
         unset($tokens);
         self::$classContent = null;
+        $parts[LexedPartInterface::FILE_NAME_PART] = $filePath;
 
         return $parts;
     }

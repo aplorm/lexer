@@ -17,6 +17,7 @@ use Aplorm\Lexer\Tests\Sample\GroupUseClassTest;
 use Aplorm\Lexer\Tests\Sample\NamespaceClassTest;
 use Aplorm\Lexer\Tests\Sample\SubNamespace\DummyClass;
 use Aplorm\Lexer\Tests\Sample\SubNamespace\FooClass;
+use Aplorm\Lexer\Tests\Sample\TestTraits;
 use Aplorm\Lexer\Tests\Sample\UseAsClassTest;
 
 trait FileDataProviderTrait
@@ -51,6 +52,7 @@ trait FileDataProviderTrait
             [
                 $this->tokeniseClass(TraitDummyClass::class),
                 'TestTraits',
+                TestTraits::class,
             ],
         ];
     }
