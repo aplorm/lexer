@@ -61,7 +61,7 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
 
         self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('$str', $partName);
+        self::assertEquals('str', $partName);
         self::assertEquals('private', $partData['visibility']);
         self::assertTrue($partData['isValueAConstant']);
     }
@@ -84,7 +84,7 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
 
         self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('$str', $partName);
+        self::assertEquals('str', $partName);
         self::assertEquals('private', $partData['visibility']);
         self::assertFalse($partData['isValueAConstant']);
     }
@@ -107,10 +107,10 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
 
         self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('$str', $partName);
+        self::assertEquals('str', $partName);
         self::assertEquals('private', $partData['visibility']);
         self::assertTrue($partData['nullable']);
-        self::assertArrayNotHasKey('isValueAConstant', $partData);
+        self::assertFalse($partData['isValueAConstant']);
     }
 
     public function testDefaultValue(): void

@@ -54,6 +54,11 @@ class ClassPartAnalyser
     private static bool $nullable = false;
 
     /**
+     * used during element analyzed to determine if element is static.
+     */
+    private static bool $isStatic = false;
+
+    /**
      * the current element type.
      */
     private static ?string $type = null;
@@ -135,13 +140,19 @@ class ClassPartAnalyser
     {
         self::reset();
         self::$nullable = false;
+        self::$isStatic = false;
         self::$type = null;
+        self::$previousVisibility = 'public';
         while (self::$iterator < self::$tokenLength && !self::isA([
             TokenNameInterface::VARIABLE_TOKEN,
             TokenNameInterface::FUNCTION_TOKEN,
         ])) {
             if (self::isA(TokenNameInterface::VISIBILITY_TOKENS)) {
                 self::$previousVisibility = self::tokenValue();
+            }
+
+            if (self::isA(TokenNameInterface::STATIC_TOKEN)) {
+                self::$isStatic = true;
             }
             if (self::isA(TokenNameInterface::CONSTANT_TOKEN)) {
                 break;
@@ -173,6 +184,7 @@ class ClassPartAnalyser
             'nullable' => false,
             'type' => null,
         ];
+
         if (self::isA(TokenNameInterface::QUESTION_MARK_TOKEN)) {
             $data['nullable'] = true;
             self::next();
@@ -197,15 +209,22 @@ class ClassPartAnalyser
      */
     protected static function handleVariable(): array
     {
+
+        if (self::isA(TokenNameInterface::AND_TOKEN)) {
+            self::next();
+        }
+
         self::buffering();
-        $variableName = self::flush();
+        $variableName = str_replace(['$', '&'], '', self::flush());
 
         $varData = [
             'name' => $variableName,
             'visibility' => self::$previousVisibility,
             'nullable' => self::$nullable,
             'type' => self::$type,
+            'static' => self::$isStatic,
             'annotations' => empty(self::$lastAnnotations) ? null : self::$lastAnnotations,
+            'isValueAConstant' => false,
         ];
 
         self::$lastAnnotations = null;
@@ -236,8 +255,9 @@ class ClassPartAnalyser
             'name' => $functionName,
             'visibility' => self::$previousVisibility,
             'nullable' => self::$nullable,
-            'type' => self::$type,
+            'static' => self::$isStatic,
             'annotations' => empty(self::$lastAnnotations) ? null : self::$lastAnnotations,
+            'returnType' => [],
         ];
 
         self::$lastAnnotations = null;
@@ -264,7 +284,7 @@ class ClassPartAnalyser
         }
         self::next();
 
-        return ['partType' => LexedPartInterface::FUNCTION_PART, 'partName' => &$functionName, 'partData' => &$funcData];
+        return ['partType' => LexedPartInterface::METHOD_PART, 'partName' => &$functionName, 'partData' => &$funcData];
     }
 
     /**
@@ -347,7 +367,6 @@ class ClassPartAnalyser
         } while (self::$iterator < self::$tokenLength && !self::isA(TokenNameInterface::OPEN_PARENTHESIS_TOKEN));
         self::next();
         self::skip();
-
         while (self::$iterator < self::$tokenLength && !self::isA(TokenNameInterface::CLOSE_PARENTHESIS_TOKEN)) {
             if (!self::isA(TokenNameInterface::VARIABLE_TOKEN)) {
                 $data = self::handleElementData();

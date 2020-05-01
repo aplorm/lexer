@@ -30,6 +30,7 @@ interface TokenNameInterface
     public const VARIABLE_TOKEN = T_VARIABLE;
     public const FUNCTION_TOKEN = T_FUNCTION;
     public const CONSTANT_TOKEN = T_CONST;
+    public const STATIC_TOKEN = T_STATIC;
 
     public const CLASS_TOKEN = T_CLASS;
     public const TRAIT_TOKEN = T_TRAIT;
@@ -50,6 +51,7 @@ interface TokenNameInterface
     public const EMPTY_TOKEN = '';
     public const QUESTION_MARK_TOKEN = '?';
     public const EQUAL_TOKEN = '=';
+    public const AND_TOKEN = '&';
 
     public const CONSTANT_ENCAPSED_STRING_TOKEN = T_CONSTANT_ENCAPSED_STRING;
     public const ENCAPSED_AND_WHITESPACE_TOKEN = T_ENCAPSED_AND_WHITESPACE;
@@ -98,5 +100,6 @@ interface TokenNameInterface
         self::CLOSE_PARENTHESIS_TOKEN => self::CLOSE_PARENTHESIS_TOKEN,
         self::EQUAL_TOKEN => self::EQUAL_TOKEN,
         self::COLON_TOKEN => self::COLON_TOKEN,
+        self::AND_TOKEN => self::AND_TOKEN,
     ];
 }

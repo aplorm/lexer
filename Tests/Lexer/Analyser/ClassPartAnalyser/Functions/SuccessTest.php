@@ -61,7 +61,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::METHOD_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
     }
@@ -83,7 +83,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::METHOD_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('string', $partData['returnType']['type']);
         self::assertTrue($partData['returnType']['nullable']);
@@ -113,7 +113,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::METHOD_PART, $partType);
         self::assertEquals('foo', $partName);
     }
 
@@ -134,7 +134,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::METHOD_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
     }
@@ -156,7 +156,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
 
-        self::assertEquals(LexedPartInterface::FUNCTION_PART, $partType);
+        self::assertEquals(LexedPartInterface::METHOD_PART, $partType);
         self::assertEquals('foo', $partName);
         self::assertEquals('public', $partData['visibility']);
         self::assertEquals('string', $partData['returnType']['type']);
@@ -180,7 +180,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertArrayHasKey('$str', $partData['parameters']);
+        self::assertArrayHasKey('str', $partData['parameters']);
     }
 
     public function testParameterType(): void
@@ -200,8 +200,8 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('string', $partData['parameters']['$str']['type']);
-        self::assertFalse($partData['parameters']['$str']['nullable']);
+        self::assertEquals('string', $partData['parameters']['str']['type']);
+        self::assertFalse($partData['parameters']['str']['nullable']);
     }
 
     public function testFunctionAnnotations(): void
@@ -250,7 +250,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertTrue($partData['parameters']['$str']['nullable']);
+        self::assertTrue($partData['parameters']['str']['nullable']);
     }
 
     public function testParameterDefaultValue(): void
@@ -270,7 +270,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('bla', $partData['parameters']['$str']['value']);
+        self::assertEquals('bla', $partData['parameters']['str']['value']);
     }
 
     public function testParameterIsNotConstantDefaultValue(): void
@@ -290,8 +290,8 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('bla', $partData['parameters']['$str']['value']);
-        self::assertFalse($partData['parameters']['$str']['isValueAConstant']);
+        self::assertEquals('bla', $partData['parameters']['str']['value']);
+        self::assertFalse($partData['parameters']['str']['isValueAConstant']);
     }
 
     public function testParameterIsConstantDefaultValue(): void
@@ -311,7 +311,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertTrue($partData['parameters']['$str']['isValueAConstant']);
+        self::assertTrue($partData['parameters']['str']['isValueAConstant']);
     }
 
     public function testParameterIsMultipleConstantDefaultValue(): void
@@ -332,10 +332,10 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
 
         self::assertEquals(2, \count($partData['parameters']));
-        self::assertTrue($partData['parameters']['$str']['isValueAConstant']);
-        self::assertEquals('CONSTANT', $partData['parameters']['$str']['value']);
-        self::assertTrue($partData['parameters']['$param']['isValueAConstant']);
-        self::assertEquals('true', $partData['parameters']['$param']['value']);
+        self::assertTrue($partData['parameters']['str']['isValueAConstant']);
+        self::assertEquals('CONSTANT', $partData['parameters']['str']['value']);
+        self::assertTrue($partData['parameters']['param']['isValueAConstant']);
+        self::assertEquals('true', $partData['parameters']['param']['value']);
     }
 
     public function testParameterDefaultValueHeredoc(): void
@@ -357,7 +357,7 @@ class SuccessTest extends AbstractTest
             'partData' => $partData,
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
-        self::assertEquals('bla bla', $partData['parameters']['$str']['value']);
+        self::assertEquals('bla bla', $partData['parameters']['str']['value']);
     }
 
     public function testParameterDefaultValueArray(): void
@@ -382,9 +382,9 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
 
-        self::assertArrayHasKey('A', $partData['parameters']['$str']['value'][0]);
-        self::assertContains('A', $partData['parameters']['$str']['value'][1]);
-        self::assertContains('A', $partData['parameters']['$str']['value']);
+        self::assertArrayHasKey('A', $partData['parameters']['str']['value'][0]);
+        self::assertContains('A', $partData['parameters']['str']['value'][1]);
+        self::assertContains('A', $partData['parameters']['str']['value']);
     }
 
     public function testParameterDefaultValueOldArray(): void
@@ -409,8 +409,29 @@ class SuccessTest extends AbstractTest
         ] = ClassPartAnalyser::analyse($annotations);
         self::assertEquals(1, \count($partData['parameters']));
 
-        self::assertArrayHasKey('A', $partData['parameters']['$str']['value'][0]);
-        self::assertContains('A', $partData['parameters']['$str']['value'][1]);
-        self::assertContains('A', $partData['parameters']['$str']['value']);
+        self::assertArrayHasKey('A', $partData['parameters']['str']['value'][0]);
+        self::assertContains('A', $partData['parameters']['str']['value'][1]);
+        self::assertContains('A', $partData['parameters']['str']['value']);
+    }
+
+    public function testReferenceParameter(): void
+    {
+        $code = <<< 'EOT'
+        <?php
+
+        public function foo(string &$str) {}
+        EOT;
+        $tokens = token_get_all($code);
+        $iterator = 1;
+        $annotations = [];
+        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
+        [
+            'partType' => $partType,
+            'partName' => $partName,
+            'partData' => $partData,
+        ] = ClassPartAnalyser::analyse($annotations);
+
+        self::assertEquals(1, \count($partData['parameters']));
+        self::assertArrayHasKey('str', $partData['parameters']);
     }
 }
