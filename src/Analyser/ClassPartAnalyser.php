@@ -223,7 +223,7 @@ class ClassPartAnalyser
             'nullable' => self::$nullable,
             'type' => self::$type,
             'static' => self::$isStatic,
-            'annotations' => empty(self::$lastAnnotations) ? null : self::$lastAnnotations,
+            'annotations' => self::$lastAnnotations,
             'isValueAConstant' => false,
         ];
 
@@ -256,7 +256,7 @@ class ClassPartAnalyser
             'visibility' => self::$previousVisibility,
             'nullable' => self::$nullable,
             'static' => self::$isStatic,
-            'annotations' => empty(self::$lastAnnotations) ? null : self::$lastAnnotations,
+            'annotations' => self::$lastAnnotations,
             'returnType' => [],
         ];
 
