@@ -33,7 +33,7 @@ trait FileDataProviderTrait
             [
                 $this->tokeniseClass(NamespaceClassTest::class),
                 DummyClass::class,
-                1,
+                2,
             ],
             [
                 $this->tokeniseClass(GroupUseClassTest::class),
@@ -86,7 +86,7 @@ trait FileDataProviderTrait
         return [
             [
                 $this->tokeniseClass(UseAsClassTest::class),
-                NULL,
+                null,
             ],
             [
                 $this->tokeniseClass(GroupUseClassTest::class),

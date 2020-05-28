@@ -100,14 +100,10 @@ class SuccessTest extends AbstractTest
      * @dataProvider classExtendProvider
      *
      * @param array<mixed> $tokens
-     * @param string       $firstAlias
-     * @param string       $aliasValue
-     * @param int          $aliasNumber
      */
-    public function testExtends(&$tokens, $extendValue): void
+    public function testExtends(&$tokens, ?string $extendValue): void
     {
         $parts = TokenAnalyser::analyse($tokens);
-
         self::assertEquals($extendValue, $parts[LexedPartInterface::CLASS_NAME_PART]['parent']);
     }
 }

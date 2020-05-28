@@ -13,8 +13,10 @@ declare(strict_types=1);
 namespace Aplorm\Lexer\Tests\Sample;
 
 use Aplorm\Lexer\Tests\Sample\SubNamespace\DummyClass;
+use Aplorm\Lexer\Tests\Sample\SubNamespace\TestTraits;
 
 class NamespaceClassTest
 {
+    use TestTraits;
     private DummyClass $dc;
 }

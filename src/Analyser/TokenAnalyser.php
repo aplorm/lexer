@@ -66,7 +66,7 @@ class TokenAnalyser
      *
      * @see DockBlockAnalyser::analyse
      */
-    private static ?array $lastAnnotations = null;
+    private static array $lastAnnotations = [];
 
     /**
      * all the token find with get_all_token method.
@@ -126,7 +126,9 @@ class TokenAnalyser
                 self::handleClassName();
             } elseif (self::isA(TokenNameInterface::DOC_COMMENT_TOKEN)) {
                 self::handleDocComment();
-            } elseif (self::isA(TokenNameInterface::VISIBILITY_TOKENS)) {
+            } elseif (self::isA(TokenNameInterface::DECLARE_TOKEN)) {
+                self::skipUntil(TokenNameInterface::SEMI_COLON_TOKEN);
+            } else {
                 self::handleElement();
             }
 
@@ -177,7 +179,7 @@ class TokenAnalyser
             'isTrait' => $isTrait,
         ];
 
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$inClass = true;
         self::addDataToPart(LexedPartInterface::CLASS_NAME_PART, null, $classData);
     }
@@ -304,12 +306,6 @@ class TokenAnalyser
     protected static function addDataToPart(string $part, ?string $key, &$value = true): void
     {
         if (null === $key) {
-            if (\is_array(self::$parts[$part])) {
-                self::$parts[$part][] = $value;
-
-                return;
-            }
-
             self::$parts[$part] = $value;
 
             return;
@@ -341,7 +337,7 @@ class TokenAnalyser
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$token = self::$previousToken = null;
         self::$tokenLength = \count($tokens);
         self::$iterator = 0;
@@ -358,7 +354,7 @@ class TokenAnalyser
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$token = self::$previousToken = null;
         self::$tokenLength = 0;
         self::$iterator = 0;

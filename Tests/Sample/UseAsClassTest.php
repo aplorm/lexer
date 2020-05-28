@@ -16,5 +16,5 @@ use Aplorm\Lexer\Tests\Sample\SubNamespace\DummyClass as DC;
 
 class UseAsClassTest
 {
-    private DC $dc;
+    private ?DC $dc = null;
 }
