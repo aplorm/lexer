@@ -7,7 +7,7 @@ install:
   - composer install
 script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
-  - vendor/bin/phpstan analyse src tests features --level=7
+  - vendor/bin/phpstan analyse src Tests features --level=7
   - vendor/bin/php-cs-fixer fix -v --show-progress=estimating-max --diff-format=udiff
 
 after_script:
