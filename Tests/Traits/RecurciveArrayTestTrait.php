@@ -23,7 +23,7 @@ trait RecurciveArrayTestTrait
     protected function recurciveCheck($expectedData, $effectiveData): void
     {
         if (!\is_array($expectedData) && !\is_array($effectiveData)) {
-            $this->assertEquals($expectedData, $effectiveData, $key);
+            $this->assertEquals($expectedData, $effectiveData);
 
             return;
         }

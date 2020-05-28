@@ -28,7 +28,7 @@ trait TestTraits
         string $param1,
         array $param2
     ): bool {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;
@@ -36,7 +36,7 @@ trait TestTraits
 
     public function mafunction2(string $param1 = 'bla', array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;
@@ -46,7 +46,7 @@ trait TestTraits
         bla bla
     EOT , array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;

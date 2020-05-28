@@ -19,6 +19,9 @@ trait FileProviderTrait
 {
     protected function provideClassContent(string $className): string
     {
+        if (!class_exists($className)) {
+            throw new \InvalidArgumentException('Class does not exist');
+        }
         $reflectionClass = new ReflectionClass($className);
         /** @var string */
         $fileName = $reflectionClass->getFileName();
@@ -28,7 +31,7 @@ trait FileProviderTrait
         }
         $content = file_get_contents($fileName);
 
-        if (false === $fileName) {
+        if (false === $content) {
             throw new \RuntimeException('Unable to open file');
         }
 
@@ -44,6 +47,9 @@ trait FileProviderTrait
 
     protected function provideClassNamespace(string $className): string
     {
+        if (!class_exists($className)) {
+            throw new \InvalidArgumentException('Class does not exist');
+        }
         $reflectionClass = new ReflectionClass($className);
         // @var string
         return $reflectionClass->getNamespaceName();
