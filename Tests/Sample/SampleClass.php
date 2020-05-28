@@ -35,6 +35,9 @@ class SampleClass extends DummyClass implements DummyInterface, FooInterface
 {
     public const A_CONSTANT = 'A_CONSTANT VALUE';
 
+    /**
+     * @var int
+     */
     public static $astatic = 1;
 
     /**
@@ -49,18 +52,24 @@ class SampleClass extends DummyClass implements DummyInterface, FooInterface
     // line comment
     private string $string = 'une string avec des espaces';
 
-    public $docBloc = <<<'EOD'
+    public string $docBloc = <<<'EOD'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOD;
 
+    /**
+     * @var string
+     */
     public $eot = <<<'EOT'
 /**
  *  @annotation(namedParameter = 'test')
  */
 EOT;
 
+    /**
+     * @var string
+     */
     public $foobar = <<<'FOOBAR'
 /**
  *  @annotation(namedParameter = 'test')
@@ -88,13 +97,11 @@ FOOBAR;
      * @param string $param1 [description]
      * @param array  $param2 [description]
      *
-     * @return [type] [description]
-     *
      * @annotationValid
      */
     public function mafunction(string $param1, array $param2): bool
     {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;
@@ -104,7 +111,7 @@ FOOBAR;
         string $param1,
         array $param2
     ): bool {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;
@@ -112,7 +119,7 @@ FOOBAR;
 
     public function mafunction2(string $param1 = 'bla', array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;
@@ -122,7 +129,7 @@ FOOBAR;
         bla bla
     EOT , array $param2 = [['A' => 'B'], ['A', 'B'], 'A']): bool
     {
-        if (true) {
+        if (random_int(0, 1)) {
         }
 
         return true;

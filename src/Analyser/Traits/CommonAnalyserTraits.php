@@ -58,8 +58,27 @@ trait CommonAnalyserTraits
             [
                 TokenNameInterface::WHITESPACE_TOKEN,
                 TokenNameInterface::EMPTY_TOKEN,
+                TokenNameInterface::OPEN_TAG_TOKEN,
             ]
         )) {
+            self::next();
+            $skip = true;
+        }
+
+        return $skip;
+    }
+
+    /**
+     * skip until the token is find.
+     *
+     * @param int|int[]|string|string[] $tokens the expected type
+     *
+     * @return bool if a skip is made return true, false otherwise
+     */
+    protected static function skipUntil($tokens): bool
+    {
+        $skip = false;
+        while (self::$iterator < self::$tokenLength && !self::isA($tokens)) {
             self::next();
             $skip = true;
         }

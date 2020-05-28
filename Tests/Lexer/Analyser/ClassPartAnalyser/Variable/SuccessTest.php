@@ -15,17 +15,52 @@ namespace Aplorm\Lexer\Tests\Lexer\Analyser\ClassPartAnalyser\Variable;
 use Aplorm\Common\Lexer\LexedPartInterface;
 use Aplorm\Common\Test\AbstractTest;
 use Aplorm\Lexer\Analyser\ClassPartAnalyser;
+use Aplorm\Lexer\Analyser\DocBlockAnalyser;
 use Aplorm\Lexer\Tests\Lexer\Analyser\Traits\FileDataProviderTrait;
+use Aplorm\Lexer\Tests\Traits\RecurciveArrayTestTrait;
 
 class SuccessTest extends AbstractTest
 {
     use FileDataProviderTrait;
+    use RecurciveArrayTestTrait;
+
+    /**
+     * @var mixed[]
+     */
+    private static ?array $annotations = [];
+
+    /**
+     * @var mixed[]
+     */
+    private static ?array $tokens = [];
+
+    /**
+     * @var mixed[]
+     */
+    private static ?array $testedValue = [];
+
+    private static int $tokenLength = 0;
+
+    private static int $iterator = 0;
 
     /**
      * function call in setUp function.
      */
     protected function doSetup(): void
     {
+        [
+            $phpCode,
+            $annotationCode,
+            self::$testedValue,
+        ] = $this->getProvidedData();
+        self::$iterator = 1;
+        if (null !== $annotationCode) {
+            self::$annotations = DocBlockAnalyser::analyse($annotationCode);
+        }
+
+        self::$tokens = token_get_all($phpCode);
+        self::$tokenLength = \count(self::$tokens);
+        ClassPartAnalyser::init(self::$tokens, self::$iterator, self::$tokenLength);
     }
 
     /**
@@ -33,6 +68,12 @@ class SuccessTest extends AbstractTest
      */
     protected function doTearDown(): void
     {
+        ClassPartAnalyser::clean();
+        self::$annotations = [];
+        self::$tokens = [];
+        self::$testedValue = [];
+        self::$iterator = 0;
+        self::$tokenLength = 0;
     }
 
     public static function setupBeforeClass(): void
@@ -43,121 +84,218 @@ class SuccessTest extends AbstractTest
     {
     }
 
-    public function testVariable(): void
+    /**
+     * @dataProvider fullProvider
+     */
+    public function testFull(): void
     {
-        $code = <<< 'EOT'
-        <?php
-
-        private string $str = A_CONSTANT;
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('str', $partName);
-        self::assertEquals('private', $partData['visibility']);
-        self::assertTrue($partData['isValueAConstant']);
+        $expectedValue = ClassPartAnalyser::analyse(self::$annotations);
+        $this->recurciveCheck(self::$testedValue, $expectedValue);
     }
 
-    public function testIntegerDefaultValue(): void
+    public function fullProvider(): array
     {
-        $code = <<< 'EOT'
-        <?php
+        return [
+            [
+                <<< 'EOT'
+    <?php
+    
+    private string $str = A_CONSTANT;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => true,
+                        'value' => 'A_CONSTANT',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
+    
+    string $str = A_CONSTANT;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'public',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => true,
+                        'value' => 'A_CONSTANT',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
+    
+    protected string $str = A_CONSTANT;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'protected',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => true,
+                        'value' => 'A_CONSTANT',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
+    
+    protected string $str = A_CONSTANT;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'protected',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => true,
+                        'value' => 'A_CONSTANT',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
 
-        private string $str = 1;
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
+    protected PDO $pdo;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'pdo',
+                    'partData' => [
+                        'name' => 'pdo',
+                        'visibility' => 'protected',
+                        'nullable' => false,
+                        'type' => 'PDO',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => null,
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
 
-        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('str', $partName);
-        self::assertEquals('private', $partData['visibility']);
-        self::assertFalse($partData['isValueAConstant']);
-    }
+    private string $str = 1;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => '1',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+    <?php
 
-    public function testNullableVariable(): void
-    {
-        $code = <<< 'EOT'
-        <?php
-
-        private ?string $str;
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals(LexedPartInterface::VARIABLE_PART, $partType);
-        self::assertEquals('str', $partName);
-        self::assertEquals('private', $partData['visibility']);
-        self::assertTrue($partData['nullable']);
-        self::assertFalse($partData['isValueAConstant']);
-    }
-
-    public function testDefaultValue(): void
-    {
-        $code = <<< 'EOT'
+    private ?string $str;
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => true,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => null,
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
         <?php
 
         private string $str = 'bla bla';
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals('bla bla', $partData['value']);
-        self::assertFalse($partData['isValueAConstant']);
-    }
-
-    public function testClassConstantValue(): void
-    {
-        $code = <<< 'EOT'
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => 'bla bla',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
         <?php
 
         private string $str = self::A_CONSTANT;
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals('self::A_CONSTANT', $partData['value']);
-        self::assertTrue($partData['isValueAConstant']);
-    }
-
-    public function testArrayValue(): void
-    {
-        $code = <<< 'EOT'
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'string',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => true,
+                        'value' => 'self::A_CONSTANT',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
         <?php
 
         private array $str = [
@@ -165,26 +303,29 @@ class SuccessTest extends AbstractTest
             ['A','B'],
             'A',
         ];
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals(3, \count($partData['value']));
-        self::assertArrayHasKey('A', $partData['value'][0]);
-        self::assertContains('A', $partData['value'][1]);
-        self::assertContains('A', $partData['value']);
-    }
-
-    public function testOldArraySyntaxValue(): void
-    {
-        $code = <<< 'EOT'
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'array',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => [
+                            ['A' => 'B'],
+                            ['A', 'B'],
+                            'A',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
         <?php
 
         private array $str = array(
@@ -192,42 +333,114 @@ class SuccessTest extends AbstractTest
             ['A','B'],
             'A',
         );
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
-
-        self::assertEquals(3, \count($partData['value']));
-        self::assertArrayHasKey('A', $partData['value'][0]);
-        self::assertContains('A', $partData['value'][1]);
-        self::assertContains('A', $partData['value']);
-    }
-
-    public function testHeredoc(): void
-    {
-        $code = <<< 'EOT'
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'array',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => [
+                            ['A' => 'B'],
+                            ['A', 'B'],
+                            'A',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
         <?php
 
         private array $str = <<<'EOD'
            bla bla bla
         EOD;
-        EOT;
-        $tokens = token_get_all($code);
-        $iterator = 1;
-        $annotations = [];
-        ClassPartAnalyser::init($tokens, $iterator, \count($tokens));
-        [
-            'partType' => $partType,
-            'partName' => $partName,
-            'partData' => $partData,
-        ] = ClassPartAnalyser::analyse($annotations);
+    EOT,
+                null,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'array',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => 'bla bla bla',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+        <?php
 
-        self::assertEquals('bla bla bla', $partData['value']);
+        private array $str = <<<'EOD'
+           bla bla bla
+        EOD;
+        EOT,
+                <<< 'EOT'
+        /**
+         * @author string|null $str
+         * @see
+         */
+        EOT,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'array',
+                        'static' => false,
+                        'annotations' => [],
+                        'isValueAConstant' => false,
+                        'value' => 'bla bla bla',
+                    ],
+                ],
+            ],
+            [
+                <<< 'EOT'
+        <?php
+
+        private array $str = <<<'EOD'
+           bla bla bla
+        EOD;
+        EOT,
+                <<< 'EOT'
+        /**
+         * @param string|null $str
+         * @annotation
+         */
+        EOT,
+                [
+                    'partType' => LexedPartInterface::VARIABLE_PART,
+                    'partName' => 'str',
+                    'partData' => [
+                        'name' => 'str',
+                        'visibility' => 'private',
+                        'nullable' => false,
+                        'type' => 'array',
+                        'static' => false,
+                        'annotations' => [
+                            [
+                                'name' => 'annotation',
+                                'params' => [],
+                            ],
+                        ],
+                        'isValueAConstant' => false,
+                        'value' => 'bla bla bla',
+                    ],
+                ],
+            ],
+        ];
     }
 }

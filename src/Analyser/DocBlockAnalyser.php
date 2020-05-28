@@ -139,9 +139,7 @@ class DocBlockAnalyser
             return null;
         }
         $annotation['name'] = $name;
-        if (\in_array($name, NativeAnnotations::TYPE_ANNOTATIONS, true)) {
-            $annotation['types'] = self::handleTypeAnnotations();
-        } elseif (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
+        if (self::isA(DocBlockTokenInterface::OPEN_PARENTHESIS_TOKEN)) {
             $annotation['params'] = self::handleAnnotationParams($annotation['name']);
         }
 
@@ -201,41 +199,6 @@ class DocBlockAnalyser
     }
 
     /**
-     * Handle type for annotation like @var, @param or @return.
-     *
-     * @return array<mixed>
-     */
-    protected static function handleTypeAnnotations(): array
-    {
-        $types = [
-            'paramTypes' => [],
-        ];
-        self::skip();
-
-        while (self::$iterator < self::$tokenLength && !self::isA(self::SKIPPED_TOKEN)) {
-            if (self::isA(DocBlockTokenInterface::PIPE_TOKEN)) {
-                $types['paramTypes'][] = self::flush();
-                self::next();
-            }
-            self::buffering();
-            self::next();
-        }
-        $types['paramTypes'][] = self::flush();
-
-        self::skip();
-        if (self::isA(DocBlockTokenInterface::DOLLAR_TOKEN)) {
-            while (self::$iterator < self::$tokenLength && !self::isA(self::SKIPPED_TOKEN)) {
-                self::buffering();
-                self::next();
-            }
-
-            $types['param'] = self::flush();
-        }
-
-        return $types;
-    }
-
-    /**
      * handle param of an annotation.
      *
      * @param string $annotation the current annotation
@@ -251,7 +214,10 @@ class DocBlockAnalyser
                 self::PARAM_TYPE_KEY => TypeInterface::STRING_TYPE,
                 self::PARAM_VALUE_KEY => self::handleStringParam($annotation),
             ];
-        } elseif (self::isA(DocBlockTokenInterface::OPEN_CURLY_BRACE_TOKEN)) {
+        } elseif (self::isA([
+            DocBlockTokenInterface::OPEN_CURLY_BRACE_TOKEN,
+            DocBlockTokenInterface::OPEN_BRACKET_TOKEN,
+        ])) {
             $param = [
                 self::PARAM_TYPE_KEY => TypeInterface::OBJECT_TYPE,
                 self::PARAM_VALUE_KEY => self::handleObject($annotation),
@@ -291,6 +257,7 @@ class DocBlockAnalyser
             DocBlockTokenInterface::COMMA_TOKEN,
             DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
             DocBlockTokenInterface::CLOSE_PARENTHESIS_TOKEN,
+            DocBlockTokenInterface::CLOSE_BRACKET_TOKEN,
         ])) {
             self::buffering();
             self::next();
@@ -383,16 +350,19 @@ class DocBlockAnalyser
         $params = [];
         $currentKey = null;
         self::next();
-        while (self::$iterator < self::$tokenLength && !self::isA(DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN)) {
+        while (self::$iterator < self::$tokenLength && !self::isA([
+            DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
+            DocBlockTokenInterface::CLOSE_BRACKET_TOKEN,
+        ])) {
             self::skip();
             $param = self::handleParam($annotation);
-
             if (self::isA(self::OBJECT_SEPARATOR_TOKEN)) {
                 $currentKey = $param;
             } elseif (self::isA([
                 DocBlockTokenInterface::COMMA_TOKEN,
                 DocBlockTokenInterface::EMPTY_TOKEN,
                 DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
+                DocBlockTokenInterface::CLOSE_BRACKET_TOKEN,
             ]) && null !== $param) {
                 if (null === $currentKey && empty($param[self::PARAM_VALUE_KEY])) {
                     throw new AnnotationSyntaxException('object not correcly formed for annotation : '.$annotation);
@@ -410,6 +380,7 @@ class DocBlockAnalyser
             if (self::isA([
                 DocBlockTokenInterface::EMPTY_TOKEN,
                 DocBlockTokenInterface::CLOSE_CURLY_BRACE_TOKEN,
+                DocBlockTokenInterface::CLOSE_BRACKET_TOKEN,
             ])) {
                 break;
             }

@@ -17,6 +17,8 @@ interface TokenNameInterface
     public const NAMESPACE_TOKEN = T_NAMESPACE;
     public const USE_TOKEN = T_USE;
     public const AS_TOKEN = T_AS;
+    public const OPEN_TAG_TOKEN = T_OPEN_TAG;
+    public const DECLARE_TOKEN = T_DECLARE;
 
     public const WHITESPACE_TOKEN = T_WHITESPACE;
     public const STRING_TOKEN = T_STRING;

@@ -75,7 +75,7 @@ class ClassPartAnalyser
      *
      * @see DockBlockAnalyser::analyse
      */
-    private static ?array $lastAnnotations = null;
+    private static array $lastAnnotations = [];
 
     /**
      * tokens aray find with token_get_all.
@@ -107,7 +107,7 @@ class ClassPartAnalyser
      *
      * @return array<mixed> function or attribute data
      */
-    public static function analyse(?array &$lastAnnotations = null): array
+    public static function analyse(array &$lastAnnotations = []): array
     {
         self::$lastAnnotations = &$lastAnnotations;
 
@@ -125,7 +125,7 @@ class ClassPartAnalyser
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$tokens = [];
         self::$iterator = 0;
         self::$tokenLength = 0;
@@ -180,21 +180,22 @@ class ClassPartAnalyser
      */
     protected static function handleElementData(): array
     {
+        $questionMarkFinded = false;
         $data = [
-            'nullable' => false,
+            'nullable' => true,
             'type' => null,
         ];
 
         if (self::isA(TokenNameInterface::QUESTION_MARK_TOKEN)) {
-            $data['nullable'] = true;
+            $questionMarkFinded = true;
             self::next();
-            self::skip();
-            if (self::isA(TokenNameInterface::STRING_TOKEN)) {
-                $data['type'] = self::tokenValue();
-                self::next();
-            }
-        } elseif (self::isA(TokenNameInterface::STRING_TOKEN)) {
+        }
+
+        self::skip();
+
+        if (!self::isA(TokenNameInterface::VARIABLE_TOKEN)) {
             $data['type'] = self::tokenValue();
+            $data['nullable'] = $questionMarkFinded;
             self::next();
         }
         self::next();
@@ -209,7 +210,6 @@ class ClassPartAnalyser
      */
     protected static function handleVariable(): array
     {
-
         if (self::isA(TokenNameInterface::AND_TOKEN)) {
             self::next();
         }
@@ -227,7 +227,7 @@ class ClassPartAnalyser
             'isValueAConstant' => false,
         ];
 
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
@@ -260,7 +260,7 @@ class ClassPartAnalyser
             'returnType' => [],
         ];
 
-        self::$lastAnnotations = null;
+        self::$lastAnnotations = [];
         self::$previousVisibility = null;
         self::$nullable = false;
         self::$type = null;
@@ -368,6 +368,7 @@ class ClassPartAnalyser
         self::next();
         self::skip();
         while (self::$iterator < self::$tokenLength && !self::isA(TokenNameInterface::CLOSE_PARENTHESIS_TOKEN)) {
+            self::$nullable = true;
             if (!self::isA(TokenNameInterface::VARIABLE_TOKEN)) {
                 $data = self::handleElementData();
                 self::$nullable = $data['nullable'];

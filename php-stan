@@ -1,2 +1,2 @@
 #!/bin/bash
-vendor/bin/phpstan analyse src tests --level=7
+vendor/bin/phpstan analyse src Tests features --level=7

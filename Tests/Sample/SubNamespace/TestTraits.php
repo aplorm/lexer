@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Aplorm\Lexer\Tests\Sample;
+namespace Aplorm\Lexer\Tests\Sample\SubNamespace;
 
 trait TestTraits
 {
@@ -38,7 +38,6 @@ trait TestTraits
     {
         if (random_int(0, 1)) {
         }
-
         return true;
     }
 

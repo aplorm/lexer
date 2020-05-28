@@ -1,0 +1,22 @@
+default:
+    suites:
+      functions:
+        paths:
+          - '%paths.base%/features/scenarios/functions'
+        contexts:
+          - Aplorm\Lexer\Behat\Context\FeatureContext
+      variables:
+        paths:
+          - '%paths.base%/features/scenarios/variables'
+        contexts:
+          - Aplorm\Lexer\Behat\Context\FeatureContext
+      classes:
+        paths:
+          - '%paths.base%/features/scenarios/classes'
+        contexts:
+          - Aplorm\Lexer\Behat\Context\ClassContext
+      annotations:
+        paths:
+          - '%paths.base%/features/scenarios/annotations'
+        contexts:
+          - Aplorm\Lexer\Behat\Context\AnnotationsContext
