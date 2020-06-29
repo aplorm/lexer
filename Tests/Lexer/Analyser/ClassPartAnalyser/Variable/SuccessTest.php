@@ -99,7 +99,7 @@ class SuccessTest extends AbstractTest
             [
                 <<< 'EOT'
     <?php
-    
+
     private string $str = A_CONSTANT;
     EOT,
                 null,
@@ -121,7 +121,7 @@ class SuccessTest extends AbstractTest
             [
                 <<< 'EOT'
     <?php
-    
+
     string $str = A_CONSTANT;
     EOT,
                 null,
@@ -143,7 +143,7 @@ class SuccessTest extends AbstractTest
             [
                 <<< 'EOT'
     <?php
-    
+
     protected string $str = A_CONSTANT;
     EOT,
                 null,
@@ -165,7 +165,7 @@ class SuccessTest extends AbstractTest
             [
                 <<< 'EOT'
     <?php
-    
+
     protected string $str = A_CONSTANT;
     EOT,
                 null,
@@ -411,9 +411,11 @@ class SuccessTest extends AbstractTest
                 <<< 'EOT'
         <?php
 
-        private array $str = <<<'EOD'
-           bla bla bla
-        EOD;
+        private array $str = [
+            ['A' => 'B'],
+            ['A', 'B'],
+            'A',
+        ];
         EOT,
                 <<< 'EOT'
         /**
@@ -437,7 +439,11 @@ class SuccessTest extends AbstractTest
                             ],
                         ],
                         'isValueAConstant' => false,
-                        'value' => 'bla bla bla',
+                        'value' => [
+                            ['A' => 'B'],
+                            ['A', 'B'],
+                            'A',
+                        ],
                     ],
                 ],
             ],

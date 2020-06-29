@@ -429,6 +429,8 @@ class ClassPartAnalyser
             }
 
             if (self::isA(TokenNameInterface::CLOSE_ARRAY_TOKENS)) {
+                self::next();
+
                 break;
             }
 
