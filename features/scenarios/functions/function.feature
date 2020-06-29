@@ -57,3 +57,18 @@ Feature: Function analyse
         And the named "test", with "visibility=public,static"
         And the named "test", without "nullable"
         And the named "test", has nullable return "string"
+
+    Scenario: annotation function
+        Given the piece of code :
+        """
+            <?php
+            /**
+            * @annotation
+            */
+            public static function test(): ?string {}
+        """
+        Then I found 1 "method"
+        And the named "test", with "visibility=public,static"
+        And the named "test", without "nullable"
+        And the named "test", has nullable return "string"
+        And the named "test", with 1 annotation named "annotation"

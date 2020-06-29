@@ -200,4 +200,17 @@ class FeatureContext implements Context
         Assert::assertEquals($arg2, $this->testedPart[$arg1]['returnType']['type']);
         Assert::assertEquals('true' === $arg3, $this->testedPart[$arg1]['returnType']['nullable']);
     }
+
+    /**
+     * @Then the named :arg1, with :arg3 annotation named :arg2
+     *
+     * @param string $arg1
+     * @param string $arg2
+     * @param string $arg3
+     */
+    public function theNamedWithAnnotationNamed($arg1, $arg2, $arg3): void
+    {
+        Assert::assertCount((int) $arg3, $this->testedPart[$arg1]['annotations']);
+        Assert::assertEquals($arg2, $this->testedPart[$arg1]['annotations'][0]['name']);
+    }
 }
