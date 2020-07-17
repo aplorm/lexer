@@ -32,10 +32,10 @@ class CoverageFactory
         }
 
         $filter = new Filter();
-        $filter->addDirectoryToWhitelist($dir.'/src/Analyser');
+        $filter->addDirectoryToWhitelist($dir.'/src');
 
         self::$coverage = new CodeCoverage(null, $filter);
-
+        self::$coverage->setDisableIgnoredLines(true);
         return self::$coverage;
     }
 }
