@@ -11,7 +11,8 @@
         "phpstan/phpstan-symfony": "^0.12.4",
         "phpunit/phpunit": "^9.0",
         "behat/behat": "^3.6",
-        "phpunit/php-code-coverage": "^8.0"
+        "phpunit/php-code-coverage": "^8.0",
+        "ext-json": "*"
     },
     "license": "mit",
     "authors": [

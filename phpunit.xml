@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="phpunit.xsd"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
          colors="true"
          verbose="true">
 
     <php>
-        <ini name="error_reporting" value="-1" />
         <env name="SAMPLE_CLASSES" value="Tests/Sample"/>
     </php>
     <testsuites>

@@ -35,7 +35,8 @@ class CoverageFactory
         $filter->addDirectoryToWhitelist($dir.'/src');
 
         self::$coverage = new CodeCoverage(null, $filter);
-        self::$coverage->setDisableIgnoredLines(true);
+        self::$coverage->setDisableIgnoredLines(false);
+        self::$coverage->setCheckForUnexecutedCoveredCode(false);
         return self::$coverage;
     }
 }
